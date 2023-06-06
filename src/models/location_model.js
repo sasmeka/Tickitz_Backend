@@ -1,7 +1,7 @@
 const db = require('../configs/database')
 const model = {}
 
-model.getAllData = () => {
+model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
         db.query(`SELECT * FROM public.location ORDER BY id_location DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
