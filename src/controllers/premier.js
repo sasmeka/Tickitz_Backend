@@ -42,7 +42,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_premier, name_premier, image, count_row_seat, count_col_seat } = req.body
+        const id_premier = req.params.id
+        const { name_premier, image, count_row_seat, count_col_seat } = req.body
         const result_data = await model.getData(id_premier)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -58,17 +59,8 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_premier } = req.body
-        const result_data = await model.getData(id_premier)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        await model.deleteDataBookingbypremier({ id_premier })
-        await model.deleteDataTimeSchedulebypremier({ id_premier })
-        await model.deleteDataSchedulebypremier({ id_premier })
-        const result = await model.deleteData({ id_premier })
+        const id_premier = req.params.id
+        const result = await model.deleteAllData({ id_premier })
         return res.send(result)
     } catch (e) {
         return res.send(e)

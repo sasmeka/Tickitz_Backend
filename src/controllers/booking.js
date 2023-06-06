@@ -42,7 +42,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_booking, id_time_schedule, id_user, seats, selected_date } = req.body
+        const id_booking = req.params.id
+        const { id_time_schedule, id_user, seats, selected_date } = req.body
         const result_data = await model.getData(id_booking)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -58,7 +59,7 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_booking } = req.body
+        const id_booking = req.params.id
         const result_data = await model.getData(id_booking)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',

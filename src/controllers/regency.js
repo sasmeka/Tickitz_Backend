@@ -42,7 +42,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_regency, name_regency, id_province } = req.body
+        const id_regency = req.params.id
+        const { name_regency, id_province } = req.body
         const result_data = await model.getData(id_regency)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -58,20 +59,8 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_regency } = req.body
-        const result_data = await model.getData(id_regency)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        await model.deleteDataBookingbyregency({ id_regency })
-        await model.deleteDataTimeSchedulebyregency({ id_regency })
-        await model.deleteDataSchedulebyregency({ id_regency })
-        await model.deleteDataLocationbyregency({ id_regency })
-        await model.deleteDataVillagebyregency({ id_regency })
-        await model.deleteDataSubdistrictbyregency({ id_regency })
-        const result = await model.deleteData({ id_regency })
+        const id_regency = req.params.id
+        const result = await model.deleteAllData({ id_regency })
         return res.send(result)
     } catch (e) {
         return res.send(e)

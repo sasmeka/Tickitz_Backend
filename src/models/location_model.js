@@ -135,4 +135,25 @@ model.deleteDataSchedulebylocation = ({ id_location }) => {
     })
 }
 
+model.deleteAllData = async ({ id_location }) => {
+    try {
+        const result_data = await model.getData(id_location)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataBookingbylocation({ id_location })
+        await model.deleteDataTimeSchedulebylocation({ id_location })
+        await model.deleteDataSchedulebylocation({ id_location })
+        const result = await model.deleteData({ id_location })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
+
 module.exports = model

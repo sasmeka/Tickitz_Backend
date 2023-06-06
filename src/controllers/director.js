@@ -42,7 +42,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_director, name_director } = req.body
+        const id_director = req.params.id
+        const { name_director } = req.body
         const result_data = await model.getData(id_director)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -58,14 +59,8 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_director } = req.body
-        const result_data = await model.getData(id_director)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        const result = await model.deleteData({ id_director })
+        const id_director = req.params.id
+        const result = await model.deleteAllData({ id_director })
         return res.send(result)
     } catch (e) {
         return res.send(e)

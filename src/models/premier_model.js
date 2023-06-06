@@ -134,5 +134,25 @@ model.deleteDataSchedulebypremier = ({ id_premier }) => {
             })
     })
 }
+model.deleteAllData = async ({ id_premier }) => {
+    try {
+        const result_data = await model.getData(id_premier)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataBookingbypremier({ id_premier })
+        await model.deleteDataTimeSchedulebypremier({ id_premier })
+        await model.deleteDataSchedulebypremier({ id_premier })
+        const result = await model.deleteData({ id_premier })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
 
 module.exports = model

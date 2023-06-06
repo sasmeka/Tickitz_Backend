@@ -129,4 +129,23 @@ model.deleteDataBookingbyUser = ({ id_user }) => {
     })
 }
 
+model.deleteAllData = async ({ id_user }) => {
+    try {
+        const result_data = await model.getData(id_user)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataBookingbyUser({ id_user })
+        const result = await model.deleteData({ id_user })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
+
 module.exports = model

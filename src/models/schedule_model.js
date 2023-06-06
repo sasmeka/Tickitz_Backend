@@ -71,6 +71,25 @@ model.addDataTimeSchedulebySchedule = (values) => {
     })
 }
 
+model.addAllData = async ({ id_movie, id_location, id_premier, price, date_start, date_end, times }) => {
+    try {
+        await db.query('BEGIN')
+        const result = await model.addData({ id_movie, id_location, id_premier, price, date_start, date_end })
+        let new_id = await model.newIdData()
+        new_id = new_id.rows[0].new_id_schedule
+        let str_values_time = ''
+        times.forEach((v) => {
+            str_values_time = str_values_time + '(' + new_id + ',\'' + v + '\'),'
+        })
+        await model.addDataTimeSchedulebySchedule(str_values_time.slice(0, -1))
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
+
 model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end }) => {
     return new Promise((resolve, reject) => {
         db.query('update public.schedule SET id_movie=$2, id_location=$3, id_premier=$4, price=$5, date_start=$6, date_end=$7 where id_schedule = $1;', [id_schedule, id_movie, id_location, id_premier, price, date_start, date_end])
@@ -88,6 +107,31 @@ model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, dat
                 })
             })
     })
+}
+
+model.updateAllData = async ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end, times }) => {
+    try {
+        const result_data = await model.getData(id_schedule)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        const result = await model.updateData({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end, times })
+        await model.deleteDataBookingbyschedule({ id_schedule })
+        await model.deleteDataTimeSchedulebyschedule({ id_schedule })
+        let str_values_time = ''
+        times.forEach((v) => {
+            str_values_time = str_values_time + '(' + id_schedule + ',\'' + v + '\'),'
+        })
+        await model.addDataTimeSchedulebySchedule(str_values_time.slice(0, -1))
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
 }
 
 model.deleteData = ({ id_schedule }) => {
@@ -136,7 +180,7 @@ model.deleteDataTimeSchedulebyschedule = ({ id_schedule }) => {
                     'status': 'OK',
                     'message': 'time schedule by schedule data successfully deleted.'
                 })
-            }).catch(() => {
+            }).catch((e) => {
                 reject({
                     'code': '400',
                     'status': 'Bad Request',
@@ -144,6 +188,26 @@ model.deleteDataTimeSchedulebyschedule = ({ id_schedule }) => {
                 })
             })
     })
+}
+
+model.deleteAllData = async ({ id_schedule }) => {
+    try {
+        const result_data = await model.getData(id_schedule)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataBookingbyschedule({ id_schedule })
+        await model.deleteDataTimeSchedulebyschedule({ id_schedule })
+        const result = await model.deleteData({ id_schedule })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
 }
 
 module.exports = model

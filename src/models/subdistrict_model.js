@@ -171,4 +171,27 @@ model.deleteDataVillagebysubdistrict = ({ id_subdistrict }) => {
     })
 }
 
+model.deleteAllData = async ({ id_subdistrict }) => {
+    try {
+        const result_data = await model.getData(id_subdistrict)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataBookingbysubdistrict({ id_subdistrict })
+        await model.deleteDataTimeSchedulebysubdistrict({ id_subdistrict })
+        await model.deleteDataSchedulebysubdistrict({ id_subdistrict })
+        await model.deleteDataLocationbysubdistrict({ id_subdistrict })
+        await model.deleteDataVillagebysubdistrict({ id_subdistrict })
+        const result = await model.deleteData({ id_subdistrict })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
+
 module.exports = model

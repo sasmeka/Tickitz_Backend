@@ -48,7 +48,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_user, first_name, last_name, phone, email, pass, status_verification } = req.body
+        const id_user = req.params.id
+        const { first_name, last_name, phone, email, pass, status_verification } = req.body
         const result_data = await model.getData(id_user)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -64,15 +65,8 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_user } = req.body
-        const result_data = await model.getData(id_user)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        await model.deleteDataBookingbyUser({ id_user })
-        const result = await model.deleteData({ id_user })
+        const id_user = req.params.id
+        const result = await model.deleteAllData({ id_user })
         return res.send(result)
     } catch (e) {
         return res.send(e)

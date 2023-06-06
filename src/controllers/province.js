@@ -42,7 +42,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_province, name_province } = req.body
+        const id_province = req.params.id
+        const { name_province } = req.body
         const result_data = await model.getData(id_province)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -58,21 +59,8 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_province } = req.body
-        const result_data = await model.getData(id_province)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        await model.deleteDataBookingbyProvince({ id_province })
-        await model.deleteDataTimeSchedulebyProvince({ id_province })
-        await model.deleteDataSchedulebyProvince({ id_province })
-        await model.deleteDataLocationbyProvince({ id_province })
-        await model.deleteDataVillagebyProvince({ id_province })
-        await model.deleteDataSubdistrictbyProvince({ id_province })
-        await model.deleteDataRegencybyProvince({ id_province })
-        const result = await model.deleteData({ id_province })
+        const id_province = req.params.id
+        const result = await model.deleteAllData({ id_province })
         return res.send(result)
     } catch (e) {
         return res.send(e)
