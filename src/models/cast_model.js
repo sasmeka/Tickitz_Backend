@@ -79,5 +79,41 @@ model.deleteData = ({ id_cast }) => {
             })
     })
 }
+model.deleteDataMovieCastbyCast = ({ id_cast }) => {
+    return new Promise((resolve, reject) => {
+        db.query('delete from public.movie_cast where id_cast=$1', [id_cast])
+            .then(() => {
+                resolve({
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'cast data successfully deleted.'
+                })
+            }).catch(() => {
+                reject({
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'cast data failed to delete.'
+                })
+            })
+    })
+}
+model.deleteAllData = async ({ id_cast }) => {
+    try {
+        const result_data = await model.getData(id_cast)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataMovieCastbyCast({ id_cast })
+        const result = await model.deleteData({ id_cast })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
 
 module.exports = model

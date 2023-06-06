@@ -80,4 +80,42 @@ model.deleteData = ({ id_genre }) => {
     })
 }
 
+model.deleteDataMovieGenrebyGenre = ({ id_genre }) => {
+    return new Promise((resolve, reject) => {
+        db.query('delete from public.movie_genre where id_genre=$1', [id_genre])
+            .then(() => {
+                resolve({
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'genre data successfully deleted.'
+                })
+            }).catch(() => {
+                reject({
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'genre data failed to delete.\''
+                })
+            })
+    })
+}
+
+model.deleteAllData = async ({ id_genre }) => {
+    try {
+        const result_data = await model.getData(id_genre)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataMovieGenrebyGenre({ id_genre })
+        const result = await model.deleteData({ id_genre })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
+
 module.exports = model

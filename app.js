@@ -7,8 +7,6 @@ require('dotenv').config()
 const cors = require('cors')
 app.use(cors())
 
-const a = ''
-
 // import database config
 const db = require('./src/configs/database')
 

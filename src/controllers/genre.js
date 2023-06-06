@@ -42,7 +42,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        const { id_genre, name_genre } = req.body
+        const id_genre = req.params.id
+        const { name_genre } = req.body
         const result_data = await model.getData(id_genre)
         if (result_data.rowCount == 0) return res.send({
             'code': '404',
@@ -58,14 +59,8 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        const { id_genre } = req.body
-        const result_data = await model.getData(id_genre)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        const result = await model.deleteData({ id_genre })
+        const id_genre = req.params.id
+        const result = await model.deleteAllData({ id_genre })
         return res.send(result)
     } catch (e) {
         return res.send(e)
