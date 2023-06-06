@@ -3,7 +3,16 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`select s.*,a.time_id_schedule as times from schedule s left join (select id_schedule , ARRAY_AGG(time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule ORDER BY id_schedule DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`select s.id_schedule, m.title, pri.premier ,s.price ,s.date_start ,s.date_end ,b.full_location,a.time_id_schedule as times from schedule s 
+        left join (select id_schedule , json_object_agg(id_time_schedule,time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule 
+        left join (select l.id_location ,json_object_agg(l.id_location,concat('(',l.building,'), ',street ,', ',v.name_village,', ',s.name_subdistrict,', ',r.name_regency,', ',p.name_province)) as full_location  from "location" l
+        left join village v on v.id_village = l.id_village 
+        left join subdistrict s on s.id_subdistrict =v.id_subdistrict 
+        left join regency r on r.id_regency = s.id_regency 
+        left join province p on p.id_province = r.id_province group by l.id_location) as b on b.id_location = s.id_location
+        left join (select id_movie, json_object_agg(id_movie, title) as title from movie group by id_movie) m on m.id_movie = s.id_movie
+        left join (select id_premier, json_object_agg(id_premier, name_premier) as premier from premier group by id_premier) pri on pri.id_premier = s.id_premier
+        ORDER BY id_schedule DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -14,7 +23,16 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('select s.*,a.time_id_schedule as times from schedule s left join (select id_schedule , ARRAY_AGG(time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule WHERE s.id_schedule=$1;', [id])
+        db.query(`select s.id_schedule, m.title, pri.premier ,s.price ,s.date_start ,s.date_end ,b.full_location,a.time_id_schedule as times from schedule s 
+        left join (select id_schedule , json_object_agg(id_time_schedule,time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule 
+        left join (select l.id_location ,json_object_agg(l.id_location,concat('(',l.building,'), ',street ,', ',v.name_village,', ',s.name_subdistrict,', ',r.name_regency,', ',p.name_province)) as full_location  from "location" l
+        left join village v on v.id_village = l.id_village 
+        left join subdistrict s on s.id_subdistrict =v.id_subdistrict 
+        left join regency r on r.id_regency = s.id_regency 
+        left join province p on p.id_province = r.id_province group by l.id_location) as b on b.id_location = s.id_location
+        left join (select id_movie, json_object_agg(id_movie, title) as title from movie group by id_movie) m on m.id_movie = s.id_movie
+        left join (select id_premier, json_object_agg(id_premier, name_premier) as premier from premier group by id_premier) pri on pri.id_premier = s.id_premier
+        WHERE s.id_schedule=$1;`, [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -60,8 +78,7 @@ model.addDataTimeSchedulebySchedule = (values) => {
                     'status': 'OK',
                     'message': 'time schedule by schedule data successfully added.'
                 })
-            }).catch(() => {
-                console.log('insert into public.time_schedule (id_schedule, time_schedule) values ' + values)
+            }).catch((e) => {
                 reject({
                     'code': '400',
                     'status': 'Bad Request',
@@ -109,6 +126,25 @@ model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, dat
     })
 }
 
+model.updateDataTimeSchedule = ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end }) => {
+    return new Promise((resolve, reject) => {
+        db.query('update public.schedule SET id_movie=$2, id_location=$3, id_premier=$4, price=$5, date_start=$6, date_end=$7 where id_schedule = $1;', [id_schedule, id_movie, id_location, id_premier, price, date_start, date_end])
+            .then(() => {
+                resolve({
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'schedule data successfully updated.'
+                })
+            }).catch(() => {
+                reject({
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'schedule data failed to update.\''
+                })
+            })
+    })
+}
+
 model.updateAllData = async ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end, times }) => {
     try {
         const result_data = await model.getData(id_schedule)
@@ -118,7 +154,7 @@ model.updateAllData = async ({ id_schedule, id_movie, id_location, id_premier, p
             'message': 'data not found.'
         })
         await db.query('BEGIN')
-        const result = await model.updateData({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end, times })
+        const result = await model.updateData({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end })
         await model.deleteDataBookingbyschedule({ id_schedule })
         await model.deleteDataTimeSchedulebyschedule({ id_schedule })
         let str_values_time = ''
