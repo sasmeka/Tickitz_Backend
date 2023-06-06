@@ -3,7 +3,7 @@ const model = {}
 
 model.getAllData = () => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.province ORDER BY id_province DESC;')
+        db.query(`SELECT * FROM public.province ORDER BY id_province DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {

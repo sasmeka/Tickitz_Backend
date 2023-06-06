@@ -11,8 +11,7 @@ model.getAllData = ({ limit, offset }) => {
         left join (select tmg.id_movie, json_object_agg(tg.id_genre,tg.name_genre) as movie_genre from movie_genre tmg
         left join genre tg on tmg.id_genre = tg.id_genre
         group by tmg.id_movie) as b on b.id_movie = tm.id_movie
-       left join (select id_director,json_object_agg(id_director,name_director) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director ORDER BY tm.id_movie DESC LIMIT $1
-       OFFSET $2;`, [limit, offset])
+       left join (select id_director,json_object_agg(id_director,name_director) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director ORDER BY tm.id_movie DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {

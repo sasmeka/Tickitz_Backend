@@ -3,7 +3,11 @@ const model = require('../models/subdistrict_model')
 
 control.getAllData = async (req, res) => {
     try {
-        const result = await model.getAllData()
+        let { page, limit } = req.query
+        page = page ? parseInt(page) : 1
+        limit = limit ? parseInt(limit) : 100
+        let offset = page >= 1 ? 0 + ((page - 1) * limit) : 0
+        const result = await model.getAllData({ limit, offset })
         if (result.rowCount == 0) throw {
             'code': '404',
             'status': 'Not Found',

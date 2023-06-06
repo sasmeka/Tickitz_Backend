@@ -3,7 +3,7 @@ const model = {}
 
 model.getAllData = () => {
     return new Promise((resolve, reject) => {
-        db.query('select s.*,a.time_id_schedule as times from schedule s left join (select id_schedule , ARRAY_AGG(time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule ORDER BY id_schedule DESC;')
+        db.query(`select s.*,a.time_id_schedule as times from schedule s left join (select id_schedule , ARRAY_AGG(time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule ORDER BY id_schedule DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
