@@ -3,7 +3,10 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM public.booking ORDER BY id_booking DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`SELECT b.id_booking,b.seats, b.selected_date, b.create_at, a.user_name, c.times FROM public.booking b
+        left join (select id_user, json_object_agg(id_user,concat(first_name,' ',last_name)) as user_name from users group by id_user) as a on a.id_user=b.id_user
+        left join (select ts.id_time_schedule, json_object_agg(ts.id_time_schedule,ts.time_schedule) as times from time_schedule ts group by ts.id_time_schedule) as c on c.id_time_schedule = b.id_time_schedule
+        ORDER BY id_booking desc LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {

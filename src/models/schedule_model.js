@@ -40,9 +40,9 @@ model.getData = (id) => {
             })
     })
 }
-model.newIdData = () => {
+model.getDataTime = (id_time_schedule) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT currval(pg_get_serial_sequence(\'public.schedule\', \'id_schedule\')) as new_id_schedule')
+        db.query(`select * from public.time_schedule where id_time_schedule=$1`, [id_time_schedule])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -50,6 +50,7 @@ model.newIdData = () => {
             })
     })
 }
+
 model.addData = ({ id_movie, id_location, id_premier, price, date_start, date_end }) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.schedule (id_movie, id_location, id_premier, price, date_start, date_end) values ($1,$2,$3,$4,$5,$6);', [id_movie, id_location, id_premier, price, date_start, date_end])
@@ -69,9 +70,9 @@ model.addData = ({ id_movie, id_location, id_premier, price, date_start, date_en
     })
 }
 
-model.addDataTimeSchedulebySchedule = (values) => {
+model.addDataTime = ({ id_schedule, time }) => {
     return new Promise((resolve, reject) => {
-        db.query('insert into public.time_schedule (id_schedule, time_schedule) values ' + values)
+        db.query('insert into public.time_schedule (id_schedule, time_schedule) values ($1,$2)', [id_schedule, time])
             .then(() => {
                 resolve({
                     'code': '200',
@@ -88,25 +89,6 @@ model.addDataTimeSchedulebySchedule = (values) => {
     })
 }
 
-model.addAllData = async ({ id_movie, id_location, id_premier, price, date_start, date_end, times }) => {
-    try {
-        await db.query('BEGIN')
-        const result = await model.addData({ id_movie, id_location, id_premier, price, date_start, date_end })
-        let new_id = await model.newIdData()
-        new_id = new_id.rows[0].new_id_schedule
-        let str_values_time = ''
-        times.forEach((v) => {
-            str_values_time = str_values_time + '(' + new_id + ',\'' + v + '\'),'
-        })
-        await model.addDataTimeSchedulebySchedule(str_values_time.slice(0, -1))
-        await db.query('COMMIT')
-        return result
-    } catch (error) {
-        await db.query('ROLLBACK')
-        return error
-    }
-}
-
 model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end }) => {
     return new Promise((resolve, reject) => {
         db.query('update public.schedule SET id_movie=$2, id_location=$3, id_premier=$4, price=$5, date_start=$6, date_end=$7 where id_schedule = $1;', [id_schedule, id_movie, id_location, id_premier, price, date_start, date_end])
@@ -116,7 +98,7 @@ model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, dat
                     'status': 'OK',
                     'message': 'schedule data successfully updated.'
                 })
-            }).catch(() => {
+            }).catch((e) => {
                 reject({
                     'code': '400',
                     'status': 'Bad Request',
@@ -126,48 +108,23 @@ model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, dat
     })
 }
 
-model.updateDataTimeSchedule = ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end }) => {
+model.updateDataTime = ({ id_time_schedule, id_schedule, time }) => {
     return new Promise((resolve, reject) => {
-        db.query('update public.schedule SET id_movie=$2, id_location=$3, id_premier=$4, price=$5, date_start=$6, date_end=$7 where id_schedule = $1;', [id_schedule, id_movie, id_location, id_premier, price, date_start, date_end])
+        db.query('update public.time_schedule SET id_schedule=$2, time_schedule=$3 where id_time_schedule = $1;', [id_time_schedule, id_schedule, time])
             .then(() => {
                 resolve({
                     'code': '200',
                     'status': 'OK',
-                    'message': 'schedule data successfully updated.'
+                    'message': 'time schedule data successfully updated.'
                 })
             }).catch(() => {
                 reject({
                     'code': '400',
                     'status': 'Bad Request',
-                    'message': 'schedule data failed to update.\''
+                    'message': 'time schedule data failed to update.\''
                 })
             })
     })
-}
-
-model.updateAllData = async ({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end, times }) => {
-    try {
-        const result_data = await model.getData(id_schedule)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
-        await db.query('BEGIN')
-        const result = await model.updateData({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end })
-        await model.deleteDataBookingbyschedule({ id_schedule })
-        await model.deleteDataTimeSchedulebyschedule({ id_schedule })
-        let str_values_time = ''
-        times.forEach((v) => {
-            str_values_time = str_values_time + '(' + id_schedule + ',\'' + v + '\'),'
-        })
-        await model.addDataTimeSchedulebySchedule(str_values_time.slice(0, -1))
-        await db.query('COMMIT')
-        return result
-    } catch (error) {
-        await db.query('ROLLBACK')
-        return error
-    }
 }
 
 model.deleteData = ({ id_schedule }) => {
@@ -225,6 +182,42 @@ model.deleteDataTimeSchedulebyschedule = ({ id_schedule }) => {
             })
     })
 }
+model.deleteDataBookingbytimeschedule = ({ id_time_schedule }) => {
+    return new Promise((resolve, reject) => {
+        db.query('delete from public.booking where id_time_schedule = $1;', [id_time_schedule])
+            .then(() => {
+                resolve({
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'booking by time schedule data successfully deleted.'
+                })
+            }).catch(() => {
+                reject({
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'booking by time schedule data failed to delete.\''
+                })
+            })
+    })
+}
+model.deleteDataTimeSchedule = ({ id_time_schedule }) => {
+    return new Promise((resolve, reject) => {
+        db.query('delete from public.time_schedule ts where ts.id_time_schedule = $1;', [id_time_schedule])
+            .then(() => {
+                resolve({
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'time schedule data successfully deleted.'
+                })
+            }).catch((e) => {
+                reject({
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'time schedule data failed to delete.\''
+                })
+            })
+    })
+}
 
 model.deleteAllData = async ({ id_schedule }) => {
     try {
@@ -232,12 +225,30 @@ model.deleteAllData = async ({ id_schedule }) => {
         if (result_data.rowCount == 0) return ({
             'code': '404',
             'status': 'Not Found',
-            'message': 'data not found.'
+            'message': 'data schedule not found.'
         })
         await db.query('BEGIN')
         await model.deleteDataBookingbyschedule({ id_schedule })
         await model.deleteDataTimeSchedulebyschedule({ id_schedule })
         const result = await model.deleteData({ id_schedule })
+        await db.query('COMMIT')
+        return result
+    } catch (error) {
+        await db.query('ROLLBACK')
+        return error
+    }
+}
+model.deleteAllDataTime = async ({ id_time_schedule }) => {
+    try {
+        const result_data = await model.getDataTime(id_time_schedule)
+        if (result_data.rowCount == 0) return ({
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data time schedule not found.'
+        })
+        await db.query('BEGIN')
+        await model.deleteDataBookingbytimeschedule({ id_time_schedule })
+        const result = await model.deleteDataTimeSchedule({ id_time_schedule })
         await db.query('COMMIT')
         return result
     } catch (error) {
