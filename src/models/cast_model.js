@@ -28,15 +28,15 @@ model.addData = ({ name_cast }) => {
         db.query('insert into public.casts (name_cast) values ($1);', [name_cast])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "cast data successfully added."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'cast data successfully added.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "cast data failed to add.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'cast data failed to add.\''
                 })
             })
     })
@@ -47,15 +47,15 @@ model.updateData = ({ id_cast, name_cast }) => {
         db.query('update public.casts SET name_cast=$2 where id_cast = $1;', [id_cast, name_cast])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "cast data successfully updated."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'cast data successfully updated.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "cast data failed to update.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'cast data failed to update.\''
                 })
             })
     })
@@ -66,15 +66,15 @@ model.deleteData = ({ id_cast }) => {
         db.query('delete from public.casts where id_cast=$1', [id_cast])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "cast data successfully deleted."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'cast data successfully deleted.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "cast data failed to delete."
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'cast data failed to delete.'
                 })
             })
     })

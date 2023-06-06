@@ -28,15 +28,15 @@ model.addData = ({ name_director }) => {
         db.query('insert into public.director (name_director) values ($1);', [name_director])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "director data successfully added."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'director data successfully added.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "director data failed to add.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'director data failed to add.\''
                 })
             })
     })
@@ -47,15 +47,15 @@ model.updateData = ({ id_director, name_director }) => {
         db.query('update public.director SET name_director=$2 where id_director = $1;', [id_director, name_director])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "director data successfully updated."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'director data successfully updated.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "director data failed to update.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'director data failed to update.\''
                 })
             })
     })
@@ -66,15 +66,15 @@ model.deleteData = ({ id_director }) => {
         db.query('delete from public.director where id_director=$1', [id_director])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "director data successfully deleted."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'director data successfully deleted.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "director data failed to delete.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'director data failed to delete.\''
                 })
             })
     })

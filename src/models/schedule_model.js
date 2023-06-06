@@ -37,15 +37,15 @@ model.addData = ({ id_movie, id_location, id_premier, price, date_start, date_en
         db.query('insert into public.schedule (id_movie, id_location, id_premier, price, date_start, date_end) values ($1,$2,$3,$4,$5,$6);', [id_movie, id_location, id_premier, price, date_start, date_end])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "schedule data successfully added."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'schedule data successfully added.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "schedule data failed to add.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'schedule data failed to add.\''
                 })
             })
     })
@@ -56,16 +56,16 @@ model.addDataTimeSchedulebySchedule = (values) => {
         db.query('insert into public.time_schedule (id_schedule, time_schedule) values ' + values)
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "time schedule by schedule data successfully added."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'time schedule by schedule data successfully added.'
                 })
             }).catch(() => {
                 console.log('insert into public.time_schedule (id_schedule, time_schedule) values ' + values)
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "time schedule by schedule data failed to add.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'time schedule by schedule data failed to add.\''
                 })
             })
     })
@@ -76,15 +76,15 @@ model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, dat
         db.query('update public.schedule SET id_movie=$2, id_location=$3, id_premier=$4, price=$5, date_start=$6, date_end=$7 where id_schedule = $1;', [id_schedule, id_movie, id_location, id_premier, price, date_start, date_end])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "schedule data successfully updated."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'schedule data successfully updated.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "schedule data failed to update.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'schedule data failed to update.\''
                 })
             })
     })
@@ -95,15 +95,15 @@ model.deleteData = ({ id_schedule }) => {
         db.query('delete from public.schedule where id_schedule=$1', [id_schedule])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "schedule data successfully deleted."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'schedule data successfully deleted.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "schedule data failed to delete.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'schedule data failed to delete.\''
                 })
             })
     })
@@ -114,15 +114,15 @@ model.deleteDataBookingbyschedule = ({ id_schedule }) => {
         db.query('delete from public.booking where id_time_schedule in (select id_time_schedule from public.time_schedule ts where id_schedule = $1);', [id_schedule])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "booking by schedule data successfully deleted."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'booking by schedule data successfully deleted.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "booking by schedule data failed to delete.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'booking by schedule data failed to delete.\''
                 })
             })
     })
@@ -132,15 +132,15 @@ model.deleteDataTimeSchedulebyschedule = ({ id_schedule }) => {
         db.query('delete from public.time_schedule ts where id_schedule = $1;', [id_schedule])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "time schedule by schedule data successfully deleted."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'time schedule by schedule data successfully deleted.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "time schedule by schedule data failed to delete.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'time schedule by schedule data failed to delete.\''
                 })
             })
     })

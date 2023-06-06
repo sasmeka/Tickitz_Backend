@@ -28,15 +28,15 @@ model.addData = ({ name_genre }) => {
         db.query('insert into public.genre (name_genre) values ($1);', [name_genre])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "genre data successfully added."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'genre data successfully added.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "genre data failed to add.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'genre data failed to add.\''
                 })
             })
     })
@@ -47,15 +47,15 @@ model.updateData = ({ id_genre, name_genre }) => {
         db.query('update public.genre SET name_genre=$2 where id_genre = $1;', [id_genre, name_genre])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "genre data successfully updated."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'genre data successfully updated.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "genre data failed to update.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'genre data failed to update.\''
                 })
             })
     })
@@ -66,15 +66,15 @@ model.deleteData = ({ id_genre }) => {
         db.query('delete from public.genre where id_genre=$1', [id_genre])
             .then(() => {
                 resolve({
-                    "code": "200",
-                    "status": "OK",
-                    "message": "genre data successfully deleted."
+                    'code': '200',
+                    'status': 'OK',
+                    'message': 'genre data successfully deleted.'
                 })
             }).catch(() => {
                 reject({
-                    "code": "400",
-                    "status": "Bad Request",
-                    "message": "genre data failed to delete.'"
+                    'code': '400',
+                    'status': 'Bad Request',
+                    'message': 'genre data failed to delete.\''
                 })
             })
     })

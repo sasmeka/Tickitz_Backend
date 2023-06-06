@@ -5,9 +5,9 @@ control.getAllData = async (req, res) => {
     try {
         const result = await model.getAllData()
         if (result.rowCount == 0) throw {
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         }
         return res.send(result.rows)
     } catch (e) {
@@ -20,9 +20,9 @@ control.getData = async (req, res) => {
         const id_schedule = req.params.number
         const result = await model.getData(id_schedule)
         if (result.rowCount == 0) throw {
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         }
         return res.send(result.rows)
     } catch (e) {
@@ -38,8 +38,8 @@ control.addData = async (req, res) => {
         new_id = new_id.rows[0].new_id_schedule
         let str_values_time = ''
         times.forEach((v) => {
-            str_values_time = str_values_time + "(" + new_id + ",'" + v + "'),"
-        });
+            str_values_time = str_values_time + '(' + new_id + ',\'' + v + '\'),'
+        })
         await model.addDataTimeSchedulebySchedule(str_values_time.slice(0, -1))
         return res.send(result)
     } catch (e) {
@@ -52,16 +52,16 @@ control.updateData = async (req, res) => {
         const { id_schedule, id_movie, id_location, id_premier, price, date_start, date_end, times } = req.body
         const result_data = await model.getData(id_schedule)
         if (result_data.rowCount == 0) return res.send({
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         })
         const result = await model.updateData({ id_schedule, id_movie, id_location, id_premier, price, date_start, date_end })
         await model.deleteDataTimeSchedulebyschedule({ id_schedule })
         let str_values_time = ''
         times.forEach((v) => {
-            str_values_time = str_values_time + "(" + id_schedule + ",'" + v + "'),"
-        });
+            str_values_time = str_values_time + '(' + id_schedule + ',\'' + v + '\'),'
+        })
         await model.addDataTimeSchedulebySchedule(str_values_time.slice(0, -1))
         return res.send(result)
     } catch (e) {
@@ -74,9 +74,9 @@ control.deleteData = async (req, res) => {
         const { id_schedule } = req.body
         const result_data = await model.getData(id_schedule)
         if (result_data.rowCount == 0) return res.send({
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         })
         await model.deleteDataBookingbyschedule({ id_schedule })
         await model.deleteDataTimeSchedulebyschedule({ id_schedule })

@@ -5,9 +5,9 @@ control.getAllData = async (req, res) => {
     try {
         const result = await model.getAllData()
         if (result.rowCount == 0) throw {
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         }
         return res.send(result.rows)
     } catch (e) {
@@ -20,9 +20,9 @@ control.getData = async (req, res) => {
         const id_movie = req.params.number
         const result = await model.getData(id_movie)
         if (result.rowCount == 0) throw {
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         }
         return res.send(result.rows)
     } catch (e) {
@@ -39,11 +39,11 @@ control.addData = async (req, res) => {
         let str_values_cast = ''
         movie_id_cast.forEach((v) => {
             str_values_cast = str_values_cast + '(' + new_id + ',' + v + '),'
-        });
+        })
         let str_values_genre = ''
         movie_id_genre.forEach((v) => {
             str_values_genre = str_values_genre + '(' + new_id + ',' + v + '),'
-        });
+        })
         await model.addDataMovieCast(str_values_cast.slice(0, -1))
         await model.addDataMovieGenre(str_values_genre.slice(0, -1))
         return res.send(result)
@@ -57,9 +57,9 @@ control.updateData = async (req, res) => {
         const { id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image, movie_id_cast, movie_id_genre } = req.body
         const result_data = await model.getData(id_movie)
         if (result_data.rowCount == 0) return res.send({
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         })
         const result = await model.updateData({ id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image })
         await model.deleteDataMovieCast({ id_movie })
@@ -67,11 +67,11 @@ control.updateData = async (req, res) => {
         let str_values_cast = ''
         movie_id_cast.forEach((v) => {
             str_values_cast = str_values_cast + '(' + id_movie + ',' + v + '),'
-        });
+        })
         let str_values_genre = ''
         movie_id_genre.forEach((v) => {
             str_values_genre = str_values_genre + '(' + id_movie + ',' + v + '),'
-        });
+        })
         await model.addDataMovieCast(str_values_cast.slice(0, -1))
         await model.addDataMovieGenre(str_values_genre.slice(0, -1))
         return res.send(result)
@@ -85,9 +85,9 @@ control.deleteData = async (req, res) => {
         const { id_movie } = req.body
         const result_data = await model.getData(id_movie)
         if (result_data.rowCount == 0) return res.send({
-            "code": "404",
-            "status": "Not Found",
-            "message": "data not found."
+            'code': '404',
+            'status': 'Not Found',
+            'message': 'data not found.'
         })
         await model.deleteDataMovieCast({ id_movie })
         await model.deleteDataMovieGenre({ id_movie })
