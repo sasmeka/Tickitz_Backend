@@ -86,6 +86,16 @@ model.deleteDataSchedulebylocation = ({ id_location }) => {
             })
     })
 }
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_location) as count_data from location;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 
 model.deleteAllData = async ({ id_location }) => {
     try {

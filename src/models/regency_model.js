@@ -116,6 +116,16 @@ model.deleteDataSubdistrictbyregency = ({ id_regency }) => {
             })
     })
 }
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_regency) as count_data from regency;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 model.deleteAllData = async ({ id_regency }) => {
     try {
         const result_data = await model.getData(id_regency)

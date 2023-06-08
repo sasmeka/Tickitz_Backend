@@ -176,5 +176,14 @@ model.deleteAllDataTime = async ({ id_time_schedule }) => {
         throw error
     }
 }
-
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_schedule) as count_data from schedule;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 module.exports = model

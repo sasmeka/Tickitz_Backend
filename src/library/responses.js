@@ -1,4 +1,4 @@
-function respon(res, status, result = '') {
+function respon(res, status, result = '', meta = '') {
     let desc = ''
 
     switch (status) {
@@ -42,10 +42,12 @@ function respon(res, status, result = '') {
         results.message = result
     } else if (Array.isArray(result)) {
         results.data = result
+        results.meta = meta
     } else {
         results = {
             ...results,
-            ...result
+            ...result,
+            ...meta
         }
     }
 

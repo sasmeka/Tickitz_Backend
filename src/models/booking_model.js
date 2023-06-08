@@ -27,7 +27,16 @@ model.getData = (id) => {
             })
     })
 }
-
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_booking) as count_data from booking;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 model.addData = ({ id_time_schedule, id_user, seats, selected_date }) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.booking (id_time_schedule, id_user, seats, selected_date) values ($1,$2,$3,$4);', [id_time_schedule, id_user, seats, selected_date])

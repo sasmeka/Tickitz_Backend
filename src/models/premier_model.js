@@ -102,5 +102,15 @@ model.deleteAllData = async ({ id_premier }) => {
         throw error
     }
 }
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_premier) as count_data from premier;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 
 module.exports = model

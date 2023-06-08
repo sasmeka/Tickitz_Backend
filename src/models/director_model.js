@@ -135,6 +135,16 @@ model.deleteAllData = async ({ id_director }) => {
         throw error
     }
 }
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_director) as count_data from director;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 
 
 module.exports = model

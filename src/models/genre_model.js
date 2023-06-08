@@ -11,6 +11,16 @@ model.getAllData = ({ limit, offset }) => {
             })
     })
 }
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_genre) as count_data from genre;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {

@@ -43,6 +43,19 @@ model.getData = (value_params) => {
     })
 }
 
+model.getCountData = ({ search_title, search_release }) => {
+    search_title = search_title == "" ? "" : escape("WHERE tm.title %s", "like '%" + search_title + "%'")
+    search_release = search_release == "" ? "" : escape("AND tm.release_date =%L", search_release)
+    return new Promise((resolve, reject) => {
+        db.query(`select count(tm.id_movie) as count_data from movie tm  ${search_title} ${search_release};`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
+
 // ADD DATA
 model.addData = ({ id_director, title, release_date, duration_hour, duration_minute, synopsis, image }) => {
     return new Promise((resolve, reject) => {

@@ -79,5 +79,15 @@ model.deleteAllData = async ({ id_cast }) => {
         throw error
     }
 }
+model.getCountData = () => {
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_cast) as count_data from casts;`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 
 module.exports = model
