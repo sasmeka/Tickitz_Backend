@@ -1,15 +1,15 @@
 // import express framework
 const express = require('express')
 const route = express.Router()
-
+const authCheck = require('../middleware/authCheck')
 // import controllers
 const control = require('../controllers/movie')
 
-route.get('/:value_params', control.getData)
-route.get('/', control.getAllData)
-route.post('/', control.addData)
-route.put('/:id', control.updateData)
-route.delete('/:id', control.deleteData)
+route.get('/:value_params', authCheck, control.getData)
+route.get('/', authCheck, control.getAllData)
+route.post('/', authCheck, control.addData)
+route.put('/:id', authCheck, control.updateData)
+route.delete('/:id', authCheck, control.deleteData)
 
 //export
 module.exports = route

@@ -1,15 +1,16 @@
 // import express framework
 const express = require('express')
 const route = express.Router()
+const authCheck = require('../middleware/authCheck')
 
 // import controllers
 const control = require('../controllers/subdistrict')
 
-route.get('/', control.getAllData)
-route.get('/:number', control.getData)
-route.post('/', control.addData)
-route.put('/:id', control.updateData)
-route.delete('/:id', control.deleteData)
+route.get('/', authCheck, control.getAllData)
+route.get('/:number', authCheck, control.getData)
+route.post('/', authCheck, control.addData)
+route.put('/:id', authCheck, control.updateData)
+route.delete('/:id', authCheck, control.deleteData)
 
 //export
 module.exports = route

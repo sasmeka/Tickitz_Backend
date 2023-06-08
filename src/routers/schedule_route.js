@@ -1,18 +1,19 @@
 // import express framework
 const express = require('express')
 const route = express.Router()
+const authCheck = require('../middleware/authCheck')
 
 // import controllers
 const control = require('../controllers/schedule')
 
-route.get('/', control.getAllData)
-route.get('/:number', control.getData)
-route.post('/', control.addData)
-route.post('/time', control.addDataTime)
-route.put('/:id', control.updateData)
-route.put('/time/:id', control.updateDataTime)
-route.delete('/:id', control.deleteData)
-route.delete('/time/:id', control.deleteDataTime)
+route.get('/', authCheck, control.getAllData)
+route.get('/:number', authCheck, control.getData)
+route.post('/', authCheck, control.addData)
+route.post('/time', authCheck, control.addDataTime)
+route.put('/:id', authCheck, control.updateData)
+route.put('/time/:id', authCheck, control.updateDataTime)
+route.delete('/:id', authCheck, control.deleteData)
+route.delete('/time/:id', authCheck, control.deleteDataTime)
 
 //export
 module.exports = route

@@ -82,22 +82,18 @@ control.register = async (req, res) => {
 control.verification = async (req, res) => {
     try {
         const token = req.query.token
-        const decode = (req, res) => {
-            jwebt.verify(token, process.env.JWT_PRIVATE_KEY, (err, decode) => {
-                if (err) {
-                    return respone(res, 401, err)
-                }
-
-                console.log(decode)
-            })
-        }
-        // const result_user = await model.getData(code)
-        // if (result_user.rowCount == 0) return resp(res, 401, 'e-mail not registered.')
-        // const result_email = result_user.rows[0].email
-        // const result_id = code
-        // const check = await bcrypt.compare(result_email, code_rand)
-        // if (check == false) return resp(res, 401, 'verfication failed.')
-        // const result = await model.verification({ result_id, result_email })
+        let email = ''
+        jwebt.verify(token, process.env.JWT_PRIVATE_KEY, (err, decode) => {
+            if (err) {
+                return resp(res, 401, err)
+            }
+            email = decode.data
+        })
+        const result_user = await model.getDatabyEmail(email)
+        if (result_user.rowCount == 0) return resp(res, 401, 'e-mail not registered.')
+        const result_email = result_user.rows[0].email
+        const result_id = result_user.rows[0].id_user
+        const result = await model.verification({ result_id, result_email })
         return resp(res, 200, result)
     } catch (e) {
         console.log(e)

@@ -1,20 +1,19 @@
-const respone = require('../library/responses')
+const resp = require('../library/responses')
 const jwt = require('jsonwebtoken')
 
 const check = (req, res, next) => {
     const { authorization } = req.headers
 
     if (!authorization) {
-        return respone(res, 401, 'please login first.')
+        return resp(res, 401, 'please login first.')
     }
 
     const token = authorization.replace('Bearer ', '')
-    jwt.verify(token, process.env.SECRET, (err, decode) => {
+    jwt.verify(token, process.env.JWT_PRIVATE_KEY, (err, decode) => {
         if (err) {
-            return respone(res, 401, err)
+            return resp(res, 401, err)
         }
-
-        req.user = decode.data
+        req.data_jwt = decode.data
         return next()
     })
 }

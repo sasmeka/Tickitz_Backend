@@ -4,6 +4,7 @@ const resp = require('../library/responses')
 
 control.getAllData = async (req, res) => {
     try {
+        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         let { page, limit } = req.query
         page = page ? parseInt(page) : 1
         limit = limit ? parseInt(limit) : 100
@@ -25,6 +26,7 @@ control.getAllData = async (req, res) => {
 
 control.getData = async (req, res) => {
     try {
+        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_premier = req.params.number
         const result = await model.getData(id_premier)
         if (result.rowCount == 0) throw 'data not found.'
@@ -37,6 +39,7 @@ control.getData = async (req, res) => {
 
 control.addData = async (req, res) => {
     try {
+        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const { name_premier, image, count_row_seat, count_col_seat } = req.body
         const result = await model.addData({ name_premier, image, count_row_seat, count_col_seat })
         return resp(res, 200, result)
@@ -48,6 +51,7 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
+        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_premier = req.params.id
         const { name_premier, image, count_row_seat, count_col_seat } = req.body
         const result_data = await model.getData(id_premier)
@@ -62,6 +66,7 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
+        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_premier = req.params.id
         const result = await model.deleteAllData({ id_premier })
         return resp(res, 200, result)
