@@ -47,7 +47,7 @@ model.addData = ({ first_name, last_name, phone, email, pass_hash }) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.users (first_name, last_name, phone, email, pass, status_verification) values ($1,$2,$3,$4,$5,0);', [first_name, last_name, phone, email, pass_hash])
             .then(() => {
-                resolve('account has been registered, please verify.')
+                resolve('account has been registered, please verify via email.')
             }).catch((e) => {
                 reject('user data failed to add.')
             })

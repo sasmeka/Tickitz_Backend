@@ -1,8 +1,10 @@
 const control = {}
 const bcrypt = require('bcrypt');
+const jwebt = require('jsonwebtoken')
 const nodemailer = require('nodemailer');
 const model = require('../models/user_model')
 const resp = require('../library/responses')
+const jwt = require('../library/jwt')
 const hashing = require('../library/hashing')
 
 control.home = async (req, res) => {
@@ -18,15 +20,21 @@ control.login = async (req, res) => {
     try {
         const { email, pass } = req.body
         const result_user = await model.getDatabyEmail(email)
-        if (result_user.rowCount == 0) throw 'e-mail not registered.'
+        if (result_user.rowCount == 0) return resp(res, 401, 'e-mail not registered.')
         const result_pass = result_user.rows[0].pass
         const result_status_verify = result_user.rows[0].status_verification
-        if (result_status_verify != 1) throw 'account not verified.'
+        if (result_status_verify != 1) return resp(res, 401, 'account not verified.')
         const status = await bcrypt.compare(pass, result_pass)
         if (status == true) {
-            return resp(res, 200, 'login success.')
+            const token = jwt({
+                "email": email,
+                "id_user": result_user.rows[0].id_user,
+                "role": result_user.rows[0].role
+            })
+
+            return resp(res, 200, { "message": 'login success.', "Token": token })
         } else {
-            throw 'wrong password'
+            return resp(res, 401, 'wrong password')
         }
     } catch (e) {
         console.log(e)
@@ -39,12 +47,9 @@ control.register = async (req, res) => {
         const { first_name, last_name, phone, email, pass } = req.body
         const pass_hash = await hashing(pass)
         const result_user = await model.getDatabyEmail(email)
-        if (result_user.rowCount > 0) throw 'e-mail has been registered.'
+        if (result_user.rowCount > 0) return resp(res, 401, 'e-mail has been registered.')
         const result = await model.addData({ first_name, last_name, phone, email, pass_hash })
-        let new_id = await model.newIdData()
-        new_id = new_id.rows[0].new_id_user
-        const code_rand = await hashing(email)
-
+        const code_rand = jwt(email)
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -57,7 +62,7 @@ control.register = async (req, res) => {
             from: process.env.guser,
             to: 'sasmekaa@gmail.com',
             subject: 'Tickitz Verification',
-            text: process.env.base_url + `/verification?code=${new_id}&code_rand=${code_rand}`
+            text: process.env.base_url + `/verification?token=${code_rand}`
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -67,7 +72,6 @@ control.register = async (req, res) => {
                 console.log('Email sent: ' + info.response);
             }
         });
-
         return resp(res, 200, result)
     } catch (e) {
         console.log(e)
@@ -77,14 +81,23 @@ control.register = async (req, res) => {
 
 control.verification = async (req, res) => {
     try {
-        const { code, code_rand } = req.query
-        const result_user = await model.getData(code)
-        if (result_user.rowCount == 0) throw 'e-mail not registered.'
-        const result_email = result_user.rows[0].email
-        const result_id = code
-        const check = await bcrypt.compare(result_email, code_rand)
-        if (check == false) throw 'verfication failed.'
-        const result = await model.verification({ result_id, result_email })
+        const token = req.query.token
+        const decode = (req, res) => {
+            jwebt.verify(token, process.env.JWT_PRIVATE_KEY, (err, decode) => {
+                if (err) {
+                    return respone(res, 401, err)
+                }
+
+                console.log(decode)
+            })
+        }
+        // const result_user = await model.getData(code)
+        // if (result_user.rowCount == 0) return resp(res, 401, 'e-mail not registered.')
+        // const result_email = result_user.rows[0].email
+        // const result_id = code
+        // const check = await bcrypt.compare(result_email, code_rand)
+        // if (check == false) return resp(res, 401, 'verfication failed.')
+        // const result = await model.verification({ result_id, result_email })
         return resp(res, 200, result)
     } catch (e) {
         console.log(e)
