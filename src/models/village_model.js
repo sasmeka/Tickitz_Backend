@@ -156,11 +156,7 @@ model.deleteDataLocationbyvillage = ({ id_village }) => {
 model.deleteAllData = async ({ id_village }) => {
     try {
         const result_data = await model.getData(id_village)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
+        if (result_data.rowCount == 0) throw ('data not found.')
         await db.query('BEGIN')
         await model.deleteDataBookingbyvillage({ id_village })
         await model.deleteDataTimeSchedulebyvillage({ id_village })
@@ -171,7 +167,7 @@ model.deleteAllData = async ({ id_village }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

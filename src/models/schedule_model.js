@@ -55,17 +55,9 @@ model.addData = ({ id_movie, id_location, id_premier, price, date_start, date_en
     return new Promise((resolve, reject) => {
         db.query('insert into public.schedule (id_movie, id_location, id_premier, price, date_start, date_end) values ($1,$2,$3,$4,$5,$6);', [id_movie, id_location, id_premier, price, date_start, date_end])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'schedule data successfully added.'
-                })
+                resolve('schedule data successfully added.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'schedule data failed to add.\''
-                })
+                reject('schedule data failed to add.\'')
             })
     })
 }
@@ -74,17 +66,9 @@ model.addDataTime = ({ id_schedule, time }) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.time_schedule (id_schedule, time_schedule) values ($1,$2)', [id_schedule, time])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'time schedule by schedule data successfully added.'
-                })
+                resolve('time schedule by schedule data successfully added.')
             }).catch((e) => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'time schedule by schedule data failed to add.\''
-                })
+                reject('time schedule by schedule data failed to add.\'')
             })
     })
 }
@@ -93,17 +77,9 @@ model.updateData = ({ id_schedule, id_movie, id_location, id_premier, price, dat
     return new Promise((resolve, reject) => {
         db.query('update public.schedule SET id_movie=$2, id_location=$3, id_premier=$4, price=$5, date_start=$6, date_end=$7 where id_schedule = $1;', [id_schedule, id_movie, id_location, id_premier, price, date_start, date_end])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'schedule data successfully updated.'
-                })
+                resolve('schedule data successfully updated.')
             }).catch((e) => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'schedule data failed to update.\''
-                })
+                reject('schedule data failed to update.\'')
             })
     })
 }
@@ -112,17 +88,9 @@ model.updateDataTime = ({ id_time_schedule, id_schedule, time }) => {
     return new Promise((resolve, reject) => {
         db.query('update public.time_schedule SET id_schedule=$2, time_schedule=$3 where id_time_schedule = $1;', [id_time_schedule, id_schedule, time])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'time schedule data successfully updated.'
-                })
+                resolve('time schedule data successfully updated.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'time schedule data failed to update.\''
-                })
+                reject('time schedule data failed to update.\'')
             })
     })
 }
@@ -131,17 +99,9 @@ model.deleteData = ({ id_schedule }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.schedule where id_schedule=$1', [id_schedule])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'schedule data successfully deleted.'
-                })
+                resolve('schedule data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'schedule data failed to delete.\''
-                })
+                reject('schedule data failed to delete.\'')
             })
     })
 }
@@ -150,17 +110,9 @@ model.deleteDataBookingbyschedule = ({ id_schedule }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.booking where id_time_schedule in (select id_time_schedule from public.time_schedule ts where id_schedule = $1);', [id_schedule])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'booking by schedule data successfully deleted.'
-                })
+                resolve('booking by schedule data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'booking by schedule data failed to delete.\''
-                })
+                reject('booking by schedule data failed to delete.\'')
             })
     })
 }
@@ -168,17 +120,9 @@ model.deleteDataTimeSchedulebyschedule = ({ id_schedule }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.time_schedule ts where id_schedule = $1;', [id_schedule])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'time schedule by schedule data successfully deleted.'
-                })
+                resolve('time schedule by schedule data successfully deleted.')
             }).catch((e) => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'time schedule by schedule data failed to delete.\''
-                })
+                reject('time schedule by schedule data failed to delete.\'')
             })
     })
 }
@@ -186,17 +130,9 @@ model.deleteDataBookingbytimeschedule = ({ id_time_schedule }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.booking where id_time_schedule = $1;', [id_time_schedule])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'booking by time schedule data successfully deleted.'
-                })
+                resolve('booking by time schedule data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'booking by time schedule data failed to delete.\''
-                })
+                reject('booking by time schedule data failed to delete.\'')
             })
     })
 }
@@ -204,17 +140,9 @@ model.deleteDataTimeSchedule = ({ id_time_schedule }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.time_schedule ts where ts.id_time_schedule = $1;', [id_time_schedule])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'time schedule data successfully deleted.'
-                })
+                resolve('time schedule data successfully deleted.')
             }).catch((e) => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'time schedule data failed to delete.\''
-                })
+                reject('time schedule data failed to delete.\'')
             })
     })
 }
@@ -222,11 +150,7 @@ model.deleteDataTimeSchedule = ({ id_time_schedule }) => {
 model.deleteAllData = async ({ id_schedule }) => {
     try {
         const result_data = await model.getData(id_schedule)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data schedule not found.'
-        })
+        if (result_data.rowCount == 0) throw ('data schedule not found.')
         await db.query('BEGIN')
         await model.deleteDataBookingbyschedule({ id_schedule })
         await model.deleteDataTimeSchedulebyschedule({ id_schedule })
@@ -235,17 +159,13 @@ model.deleteAllData = async ({ id_schedule }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 model.deleteAllDataTime = async ({ id_time_schedule }) => {
     try {
         const result_data = await model.getDataTime(id_time_schedule)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data time schedule not found.'
-        })
+        if (result_data.rowCount == 0) throw ('data time schedule not found.')
         await db.query('BEGIN')
         await model.deleteDataBookingbytimeschedule({ id_time_schedule })
         const result = await model.deleteDataTimeSchedule({ id_time_schedule })

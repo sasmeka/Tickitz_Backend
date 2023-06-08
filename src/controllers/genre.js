@@ -1,5 +1,6 @@
 const control = {}
 const model = require('../models/genre_model')
+const resp = require('../library/responses')
 
 control.getAllData = async (req, res) => {
     try {
@@ -8,15 +9,11 @@ control.getAllData = async (req, res) => {
         limit = limit ? parseInt(limit) : 100
         let offset = page >= 1 ? 0 + ((page - 1) * limit) : 0
         const result = await model.getAllData({ limit, offset })
-        if (result.rowCount == 0) throw {
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        }
-        return res.send(result.rows)
+        if (result.rowCount == 0) throw 'data not found.'
+        return reps(res, 200, result.rows)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return reps(res, 500, e)
     }
 }
 
@@ -24,15 +21,11 @@ control.getData = async (req, res) => {
     try {
         const id_genre = req.params.number
         const result = await model.getData(id_genre)
-        if (result.rowCount == 0) throw {
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        }
-        return res.send(result.rows)
+        if (result.rowCount == 0) throw 'data not found.'
+        return reps(res, 200, result.rows)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return reps(res, 500, e)
     }
 }
 
@@ -40,10 +33,10 @@ control.addData = async (req, res) => {
     try {
         const { name_genre } = req.body
         const result = await model.addData({ name_genre })
-        return res.send(result)
+        return reps(res, 200, result)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return reps(res, 500, e)
     }
 }
 
@@ -52,16 +45,12 @@ control.updateData = async (req, res) => {
         const id_genre = req.params.id
         const { name_genre } = req.body
         const result_data = await model.getData(id_genre)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
+        if (result_data.rowCount == 0) throw 'data not found.'
         const result = await model.updateData({ id_genre, name_genre })
-        return res.send(result)
+        return reps(res, 200, result)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return reps(res, 500, e)
     }
 }
 
@@ -69,10 +58,10 @@ control.deleteData = async (req, res) => {
     try {
         const id_genre = req.params.id
         const result = await model.deleteAllData({ id_genre })
-        return res.send(result)
+        return reps(res, 200, result)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return reps(res, 500, e)
     }
 }
 

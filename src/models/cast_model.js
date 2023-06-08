@@ -27,17 +27,9 @@ model.addData = ({ name_cast }) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.casts (name_cast) values ($1);', [name_cast])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'cast data successfully added.'
-                })
+                resolve('cast data successfully added.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'cast data failed to add.\''
-                })
+                reject('cast data failed to add.\'')
             })
     })
 }
@@ -46,17 +38,9 @@ model.updateData = ({ id_cast, name_cast }) => {
     return new Promise((resolve, reject) => {
         db.query('update public.casts SET name_cast=$2 where id_cast = $1;', [id_cast, name_cast])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'cast data successfully updated.'
-                })
+                resolve('cast data successfully updated.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'cast data failed to update.\''
-                })
+                reject('cast data failed to update.\'')
             })
     })
 }
@@ -65,17 +49,9 @@ model.deleteData = ({ id_cast }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.casts where id_cast=$1', [id_cast])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'cast data successfully deleted.'
-                })
+                resolve('cast data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'cast data failed to delete.'
-                })
+                reject('cast data failed to delete.')
             })
     })
 }
@@ -83,28 +59,16 @@ model.deleteDataMovieCastbyCast = ({ id_cast }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.movie_cast where id_cast=$1', [id_cast])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'cast data successfully deleted.'
-                })
+                resolve('cast data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'cast data failed to delete.'
-                })
+                reject('cast data failed to delete.')
             })
     })
 }
 model.deleteAllData = async ({ id_cast }) => {
     try {
         const result_data = await model.getData(id_cast)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
+        if (result_data.rowCount == 0) throw ('data not found.')
         await db.query('BEGIN')
         await model.deleteDataMovieCastbyCast({ id_cast })
         const result = await model.deleteData({ id_cast })

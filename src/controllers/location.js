@@ -1,5 +1,6 @@
 const control = {}
 const model = require('../models/location_model')
+const resp = require('../library/responses')
 
 control.getAllData = async (req, res) => {
     try {
@@ -8,15 +9,11 @@ control.getAllData = async (req, res) => {
         limit = limit ? parseInt(limit) : 100
         let offset = page >= 1 ? 0 + ((page - 1) * limit) : 0
         const result = await model.getAllData({ limit, offset })
-        if (result.rowCount == 0) throw {
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        }
-        return res.send(result.rows)
+        if (result.rowCount == 0) throw 'data not found.'
+        return resp(res, 200, result.rows)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return resp(res, 500, e)
     }
 }
 
@@ -24,15 +21,11 @@ control.getData = async (req, res) => {
     try {
         const id_location = req.params.number
         const result = await model.getData(id_location)
-        if (result.rowCount == 0) throw {
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        }
-        return res.send(result.rows)
+        if (result.rowCount == 0) throw 'data not found.'
+        return resp(res, 200, result.rows)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return resp(res, 500, e)
     }
 }
 
@@ -40,10 +33,10 @@ control.addData = async (req, res) => {
     try {
         const { id_village, street, building } = req.body
         const result = await model.addData({ id_village, street, building })
-        return res.send(result)
+        return resp(res, 200, result)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return resp(res, 500, e)
     }
 }
 
@@ -52,16 +45,12 @@ control.updateData = async (req, res) => {
         const id_location = req.params.id
         const { id_village, street, building } = req.body
         const result_data = await model.getData(id_location)
-        if (result_data.rowCount == 0) return res.send({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
+        if (result_data.rowCount == 0) throw 'data not found.'
         const result = await model.updateData({ id_location, id_village, street, building })
-        return res.send(result)
+        return resp(res, 200, result)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return resp(res, 500, e)
     }
 }
 
@@ -69,10 +58,10 @@ control.deleteData = async (req, res) => {
     try {
         const id_location = req.params.id
         const result = await model.deleteAllData({ id_location })
-        return res.send(result)
+        return resp(res, 200, result)
     } catch (e) {
         console.log(e)
-        return res.send(e)
+        return resp(res, 500, e)
     }
 }
 

@@ -48,17 +48,9 @@ model.addData = ({ id_director, title, release_date, duration_hour, duration_min
     return new Promise((resolve, reject) => {
         db.query('insert into public.movie (id_director, title, release_date, duration_hour, duration_minute, synopsis, image) values ($1,$2,$3,$4,$5,$6,$7)', [id_director, title, release_date, duration_hour, duration_minute, synopsis, image])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'movie data successfully added.'
-                })
+                resolve('movie data successfully added.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'movie data failed to add.\''
-                })
+                reject('movie data failed to add.\'')
             })
     })
 }
@@ -78,17 +70,9 @@ model.addDataMovieCast = (values) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.movie_cast (id_movie,id_cast) values ' + values)
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'cast by movie data successfully added.'
-                })
+                resolve('cast by movie data successfully added.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'cast by movie data failed to add.\''
-                })
+                reject('cast by movie data failed to add.\'')
             })
     })
 }
@@ -96,17 +80,9 @@ model.addDataMovieGenre = (values) => {
     return new Promise((resolve, reject) => {
         db.query('insert into public.movie_genre (id_movie,id_genre) values ' + values)
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'genre by movie data successfully added.'
-                })
+                resolve('genre by movie data successfully added.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'genre by movie data failed to add.\''
-                })
+                reject('genre by movie data failed to add.\'')
             })
     })
 }
@@ -140,17 +116,9 @@ model.updateData = ({ id_movie, id_director, title, release_date, duration_hour,
     return new Promise((resolve, reject) => {
         db.query('update public.movie SET id_director=$2, title=$3, release_date=$4, duration_hour=$5, duration_minute=$6, synopsis=$7, image=$8 where id_movie = $1;', [id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'movie data successfully updated.'
-                })
+                resolve('movie data successfully updated.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'movie data failed to update.\''
-                })
+                reject('movie data failed to update.\'')
             })
     })
 }
@@ -158,11 +126,7 @@ model.updateData = ({ id_movie, id_director, title, release_date, duration_hour,
 model.updateAllData = async ({ id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image, movie_id_cast, movie_id_genre }) => {
     try {
         const result_data = await model.getData(id_movie)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
+        if (result_data.rowCount == 0) throw ('data not found.')
         await db.query('BEGIN')
         const result = await model.updateData({ id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image })
         await model.deleteDataMovieCast({ id_movie })
@@ -190,17 +154,9 @@ model.deleteData = ({ id_movie }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.movie where id_movie=$1', [id_movie])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'movie data successfully deleted.'
-                })
+                resolve('movie data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'movie data failed to delete.\''
-                })
+                reject('movie data failed to delete.\'')
             })
     })
 }
@@ -208,17 +164,9 @@ model.deleteDataMovieCast = ({ id_movie }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.movie_cast where id_movie=$1', [id_movie])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'cast by movie data successfully deleted.'
-                })
+                resolve('cast by movie data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'cast by movie data failed to delete.\''
-                })
+                reject('cast by movie data failed to delete.\'')
             })
     })
 }
@@ -226,17 +174,9 @@ model.deleteDataMovieGenre = ({ id_movie }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.movie_genre where id_movie=$1', [id_movie])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'genre by movie data successfully deleted.'
-                })
+                resolve('genre by movie data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'genre by movie data failed to delete.\''
-                })
+                reject('genre by movie data failed to delete.\'')
             })
     })
 }
@@ -244,17 +184,9 @@ model.deleteDataBooking = ({ id_movie }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.booking where id_time_schedule in (select id_time_schedule from public.time_schedule where id_schedule in (select id_schedule from public.schedule s where id_movie=$1))', [id_movie])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'booking by movie data successfully deleted.'
-                })
+                resolve('booking by movie data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'booking by movie data failed to delete.\''
-                })
+                reject('booking by movie data failed to delete.\'')
             })
     })
 }
@@ -262,17 +194,9 @@ model.deleteDataTimeSchedule = ({ id_movie }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.time_schedule where id_schedule in (select id_schedule from public.schedule s where id_movie=$1)', [id_movie])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'time schedule by movie data successfully deleted.'
-                })
+                resolve('time schedule by movie data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'time schedule by movie data failed to delete.\''
-                })
+                reject('time schedule by movie data failed to delete.\'')
             })
     })
 }
@@ -280,17 +204,9 @@ model.deleteDataSchedule = ({ id_movie }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.schedule where id_movie=$1', [id_movie])
             .then(() => {
-                resolve({
-                    'code': '200',
-                    'status': 'OK',
-                    'message': 'schedule by movie data successfully deleted.'
-                })
+                resolve('schedule by movie data successfully deleted.')
             }).catch(() => {
-                reject({
-                    'code': '400',
-                    'status': 'Bad Request',
-                    'message': 'schedule by movie data failed to delete.\''
-                })
+                reject('schedule by movie data failed to delete.\'')
             })
     })
 }
@@ -298,11 +214,7 @@ model.deleteDataSchedule = ({ id_movie }) => {
 model.deleteAllData = async ({ id_movie }) => {
     try {
         const result_data = await model.getData(id_movie)
-        if (result_data.rowCount == 0) return ({
-            'code': '404',
-            'status': 'Not Found',
-            'message': 'data not found.'
-        })
+        if (result_data.rowCount == 0) throw ('data not found.')
         await db.query('BEGIN')
         await model.deleteDataMovieCast({ id_movie })
         await model.deleteDataMovieGenre({ id_movie })
