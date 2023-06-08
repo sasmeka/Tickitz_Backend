@@ -15,6 +15,7 @@ control.getAllData = async (req, res) => {
         }
         return res.send(result.rows)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -30,6 +31,7 @@ control.getData = async (req, res) => {
         }
         return res.send(result.rows)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -40,6 +42,7 @@ control.addData = async (req, res) => {
         const result = await model.addData({ id_time_schedule, id_user, seats, selected_date })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -57,6 +60,7 @@ control.updateData = async (req, res) => {
         const result = await model.updateData({ id_booking, id_time_schedule, id_user, seats, selected_date })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -73,6 +77,7 @@ control.deleteData = async (req, res) => {
         const result = await model.deleteData({ id_booking })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }

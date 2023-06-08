@@ -3,15 +3,15 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`select s.id_schedule, m.title, pri.premier ,s.price ,s.date_start ,s.date_end ,b.full_location,a.time_id_schedule as times from schedule s 
-        left join (select id_schedule , json_object_agg(id_time_schedule,time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule 
-        left join (select l.id_location ,json_object_agg(l.id_location,concat('(',l.building,'), ',street ,', ',v.name_village,', ',s.name_subdistrict,', ',r.name_regency,', ',p.name_province)) as full_location  from "location" l
+        db.query(`select s.id_schedule, m.title, pri.premier ,s.price ,s.date_start ,s.date_end ,b.full_location,a.time_schedule as times from schedule s 
+        left join (select id_schedule , json_agg(jsonb_build_object('id_time_schedule',id_time_schedule,'time_schedule',time_schedule)) as time_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule 
+        left join (select l.id_location ,json_agg(jsonb_build_object('id_location',l.id_location,'address',concat('(',l.building,'), ',street ,', ',v.name_village,', ',s.name_subdistrict,', ',r.name_regency,', ',p.name_province))) as full_location  from "location" l
         left join village v on v.id_village = l.id_village 
         left join subdistrict s on s.id_subdistrict =v.id_subdistrict 
         left join regency r on r.id_regency = s.id_regency 
         left join province p on p.id_province = r.id_province group by l.id_location) as b on b.id_location = s.id_location
-        left join (select id_movie, json_object_agg(id_movie, title) as title from movie group by id_movie) m on m.id_movie = s.id_movie
-        left join (select id_premier, json_object_agg(id_premier, name_premier) as premier from premier group by id_premier) pri on pri.id_premier = s.id_premier
+        left join (select id_movie, json_agg(jsonb_build_object('id_movie',id_movie,'title', title)) as title from movie group by id_movie) m on m.id_movie = s.id_movie
+        left join (select id_premier, json_agg(jsonb_build_object('id_premier',id_premier,'name_premier', name_premier)) as premier from premier group by id_premier) pri on pri.id_premier = s.id_premier
         ORDER BY id_schedule DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
@@ -23,15 +23,15 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query(`select s.id_schedule, m.title, pri.premier ,s.price ,s.date_start ,s.date_end ,b.full_location,a.time_id_schedule as times from schedule s 
-        left join (select id_schedule , json_object_agg(id_time_schedule,time_schedule) as time_id_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule 
-        left join (select l.id_location ,json_object_agg(l.id_location,concat('(',l.building,'), ',street ,', ',v.name_village,', ',s.name_subdistrict,', ',r.name_regency,', ',p.name_province)) as full_location  from "location" l
+        db.query(`select s.id_schedule, m.title, pri.premier ,s.price ,s.date_start ,s.date_end ,b.full_location,a.time_schedule as times from schedule s 
+        left join (select id_schedule , json_agg(jsonb_build_object('id_time_schedule',id_time_schedule,'time_schedule',time_schedule)) as time_schedule from time_schedule ts group by ts.id_schedule) as a on a.id_schedule=s.id_schedule 
+        left join (select l.id_location ,json_agg(jsonb_build_object('id_location',l.id_location,'address',concat('(',l.building,'), ',street ,', ',v.name_village,', ',s.name_subdistrict,', ',r.name_regency,', ',p.name_province))) as full_location  from "location" l
         left join village v on v.id_village = l.id_village 
         left join subdistrict s on s.id_subdistrict =v.id_subdistrict 
         left join regency r on r.id_regency = s.id_regency 
         left join province p on p.id_province = r.id_province group by l.id_location) as b on b.id_location = s.id_location
-        left join (select id_movie, json_object_agg(id_movie, title) as title from movie group by id_movie) m on m.id_movie = s.id_movie
-        left join (select id_premier, json_object_agg(id_premier, name_premier) as premier from premier group by id_premier) pri on pri.id_premier = s.id_premier
+        left join (select id_movie, json_agg(jsonb_build_object('id_movie',id_movie,'title', title)) as title from movie group by id_movie) m on m.id_movie = s.id_movie
+        left join (select id_premier, json_agg(jsonb_build_object('id_movie',id_premier,'name_premier', name_premier)) as premier from premier group by id_premier) pri on pri.id_premier = s.id_premier
         WHERE s.id_schedule=$1;`, [id])
             .then((res) => {
                 resolve(res)
@@ -253,7 +253,7 @@ model.deleteAllDataTime = async ({ id_time_schedule }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

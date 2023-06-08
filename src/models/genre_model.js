@@ -114,7 +114,7 @@ model.deleteAllData = async ({ id_genre }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

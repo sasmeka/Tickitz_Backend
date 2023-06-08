@@ -3,7 +3,7 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM public.location ORDER BY id_location DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`SELECT l.id_location,l.building,l.street,v.village FROM public.location l left join (SELECT v.id_village , json_agg(jsonb_build_object('id_village',v.id_village,'name_village',v.name_village)) as village FROM public.village v group by v.id_village) v on v.id_village=l.id_village ORDER BY l.id_location DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -14,7 +14,7 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.location WHERE id_location=$1;', [id])
+        db.query(`SELECT l.id_location,l.building,l.street,v.village FROM public.location l left join (SELECT v.id_village , json_agg(jsonb_build_object('id_village',v.id_village,'name_village',v.name_village)) as village FROM public.village v group by v.id_village) v on v.id_village=l.id_village WHERE l.id_location=$1;`, [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -152,7 +152,7 @@ model.deleteAllData = async ({ id_location }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

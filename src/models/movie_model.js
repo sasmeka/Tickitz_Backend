@@ -1,55 +1,21 @@
 const db = require('../configs/database')
+const escape = require('pg-format')
 const model = {}
 
 // GET ALL DATA
-model.getAllData = ({ limit, offset }) => {
+model.getAllData = ({ limit, offset, search_title, search_release, order_by }) => {
+    search_title = search_title == "" ? "" : escape("WHERE tm.title %s", "like '%" + search_title + "%'")
+    search_release = search_release == "" ? "" : escape("AND tm.release_date =%L", search_release)
+    order_by = escape("ORDER BY %s", order_by)
     return new Promise((resolve, reject) => {
         db.query(`select tm.id_movie,tm.title,tm.release_date, tm.duration_hour, tm.duration_minute, tm.synopsis , tm.image, c.movie_director ,a.movie_cast as movie_id_cast,b.movie_genre as movie_id_genre from movie tm 
-        left join (select tmc.id_movie,json_object_agg(tc.id_cast,tc.name_cast) as movie_cast from movie_cast tmc
+        left join (select tmc.id_movie,json_agg(jsonb_build_object('id_cast',tc.id_cast,'name_cast',tc.name_cast)) as movie_cast from movie_cast tmc
         left join casts tc on tmc.id_cast = tc.id_cast
         group by tmc.id_movie) as a on a.id_movie = tm.id_movie
-        left join (select tmg.id_movie, json_object_agg(tg.id_genre,tg.name_genre) as movie_genre from movie_genre tmg
+        left join (select tmg.id_movie, json_agg(jsonb_build_object('id_genre',tg.id_genre,'name_genre',tg.name_genre)) as movie_genre from movie_genre tmg
         left join genre tg on tmg.id_genre = tg.id_genre
         group by tmg.id_movie) as b on b.id_movie = tm.id_movie
-       left join (select id_director,json_object_agg(id_director,name_director) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director ORDER BY tm.id_movie DESC LIMIT $1 OFFSET $2;`, [limit, offset])
-            .then((res) => {
-                resolve(res)
-            }).catch((e) => {
-                reject(e)
-            })
-    })
-}
-
-model.getAllDatabyQuery1 = ({ title_like }) => {
-    return new Promise((resolve, reject) => {
-        db.query(`select tm.id_movie,tm.title,tm.release_date, tm.duration_hour, tm.duration_minute, tm.synopsis , tm.image, c.movie_director ,a.movie_cast as movie_id_cast,b.movie_genre as movie_id_genre from movie tm 
-        left join (select tmc.id_movie,json_object_agg(tc.id_cast,tc.name_cast) as movie_cast from movie_cast tmc
-        left join casts tc on tmc.id_cast = tc.id_cast
-        group by tmc.id_movie) as a on a.id_movie = tm.id_movie
-        left join (select tmg.id_movie, json_object_agg(tg.id_genre,tg.name_genre) as movie_genre from movie_genre tmg
-        left join genre tg on tmg.id_genre = tg.id_genre
-        group by tmg.id_movie) as b on b.id_movie = tm.id_movie
-       left join (select id_director,json_object_agg(id_director,name_director) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director WHERE tm.title like $1 ORDER BY tm.id_movie DESC;`, [title_like])
-            .then((res) => {
-                resolve(res)
-            }).catch((e) => {
-
-                console.log(e)
-                reject(e)
-            })
-    })
-}
-
-model.getAllDatabyQuery2 = ({ title_like, release }) => {
-    return new Promise((resolve, reject) => {
-        db.query(`select tm.id_movie,tm.title,tm.release_date, tm.duration_hour, tm.duration_minute, tm.synopsis , tm.image, c.movie_director ,a.movie_cast as movie_id_cast,b.movie_genre as movie_id_genre from movie tm 
-        left join (select tmc.id_movie,json_object_agg(tc.id_cast,tc.name_cast) as movie_cast from movie_cast tmc
-        left join casts tc on tmc.id_cast = tc.id_cast
-        group by tmc.id_movie) as a on a.id_movie = tm.id_movie
-        left join (select tmg.id_movie, json_object_agg(tg.id_genre,tg.name_genre) as movie_genre from movie_genre tmg
-        left join genre tg on tmg.id_genre = tg.id_genre
-        group by tmg.id_movie) as b on b.id_movie = tm.id_movie
-       left join (select id_director,json_object_agg(id_director,name_director) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director WHERE tm.title like $1 AND tm.release_date=$2 ORDER BY tm.id_movie DESC;`, [title_like, release])
+       left join (select id_director,json_agg(jsonb_build_object('id_director',id_director,'name_director',name_director)) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director ${search_title} ${search_release} ${order_by} DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -62,13 +28,13 @@ model.getAllDatabyQuery2 = ({ title_like, release }) => {
 model.getData = (value_params) => {
     return new Promise((resolve, reject) => {
         db.query(`select tm.id_movie,tm.title,tm.release_date, tm.duration_hour, tm.duration_minute, tm.synopsis , tm.image, c.movie_director ,a.movie_cast as movie_id_cast,b.movie_genre as movie_id_genre from movie tm 
-        left join (select tmc.id_movie,json_object_agg(tc.id_cast,tc.name_cast) as movie_cast from movie_cast tmc
+        left join (select tmc.id_movie,json_agg(jsonb_build_object('id_cast',tc.id_cast,'name_cast',tc.name_cast)) as movie_cast from movie_cast tmc
         left join casts tc on tmc.id_cast = tc.id_cast
         group by tmc.id_movie) as a on a.id_movie = tm.id_movie
-        left join (select tmg.id_movie, json_object_agg(tg.id_genre,tg.name_genre) as movie_genre from movie_genre tmg
+        left join (select tmg.id_movie, json_agg(jsonb_build_object('id_genre',tg.id_genre,'name_genre',tg.name_genre)) as movie_genre from movie_genre tmg
         left join genre tg on tmg.id_genre = tg.id_genre
         group by tmg.id_movie) as b on b.id_movie = tm.id_movie
-       left join (select id_director,json_object_agg(id_director,name_director) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director WHERE tm.id_movie = $1`, [value_params])
+       left join (select id_director,json_agg(jsonb_build_object('id_director',id_director,'name_director',name_director)) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director WHERE tm.id_movie = $1`, [value_params])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -165,7 +131,7 @@ model.addAllData = async ({ id_director, title, release_date, duration_hour, dur
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 
@@ -215,7 +181,7 @@ model.updateAllData = async ({ id_movie, id_director, title, release_date, durat
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 
@@ -348,7 +314,7 @@ model.deleteAllData = async ({ id_movie }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

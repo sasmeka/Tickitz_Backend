@@ -15,6 +15,7 @@ control.getAllData = async (req, res) => {
         }
         return res.send(result.rows)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -30,6 +31,7 @@ control.getData = async (req, res) => {
         }
         return res.send(result.rows)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -40,6 +42,7 @@ control.addData = async (req, res) => {
         const result = await model.addData({ name_cast })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -57,6 +60,7 @@ control.updateData = async (req, res) => {
         const result = await model.updateData({ id_cast, name_cast })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -67,6 +71,7 @@ control.deleteData = async (req, res) => {
         const result = await model.deleteAllData({ id_cast })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }

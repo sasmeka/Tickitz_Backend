@@ -3,7 +3,7 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM public.subdistrict ORDER BY id_subdistrict DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`SELECT s.id_subdistrict,s.name_subdistrict, r.regency FROM public.subdistrict s left join (select r.id_regency,json_agg(jsonb_build_object('id_regency',r.id_regency,'name_regency',r.name_regency)) as regency from regency r group by r.id_regency ) as r on r.id_regency=s.id_regency ORDER BY s.id_subdistrict DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -14,7 +14,7 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.subdistrict WHERE id_subdistrict=$1;', [id])
+        db.query(`SELECT s.id_subdistrict,s.name_subdistrict, r.regency FROM public.subdistrict s left join (select r.id_regency,json_agg(jsonb_build_object('id_regency',r.id_regency,'name_regency',r.name_regency)) as regency from regency r group by r.id_regency ) as r on r.id_regency=s.id_regency WHERE s.id_subdistrict=$1;`, [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {

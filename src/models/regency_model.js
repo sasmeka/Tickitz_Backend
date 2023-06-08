@@ -3,7 +3,7 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM public.regency ORDER BY id_regency DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`select r.id_regency,r.name_regency,p.province from regency r left join (select p.id_province,json_agg(jsonb_build_object('id_province',p.id_province,'name_province',p.name_province)) as province from province p group by p.id_province) p on r.id_province =p.id_province ORDER BY r.id_regency DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -14,7 +14,7 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.regency WHERE id_regency=$1;', [id])
+        db.query(`select r.id_regency,r.name_regency,p.province from regency r left join (select p.id_province,json_agg(jsonb_build_object('id_province',p.id_province,'name_province',p.name_province)) as province from province p group by p.id_province) p on r.id_province =p.id_province WHERE r.id_regency=$1;`, [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -208,7 +208,7 @@ model.deleteAllData = async ({ id_regency }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

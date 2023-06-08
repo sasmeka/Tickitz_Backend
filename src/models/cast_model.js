@@ -112,7 +112,7 @@ model.deleteAllData = async ({ id_cast }) => {
         return result
     } catch (error) {
         await db.query('ROLLBACK')
-        return error
+        throw error
     }
 }
 

@@ -9,6 +9,7 @@ control.home = async (req, res) => {
             'message': 'WELCOME ! :)'
         })
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -41,6 +42,7 @@ control.login = async (req, res) => {
             'message': 'login success.'
         })
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -57,6 +59,7 @@ control.register = async (req, res) => {
         const result = await model.addData({ first_name, last_name, phone, email, pass })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
@@ -75,6 +78,7 @@ control.verification = async (req, res) => {
         const result = await model.verification({ result_id, result_email })
         return res.send(result)
     } catch (e) {
+        console.log(e)
         return res.send(e)
     }
 }
