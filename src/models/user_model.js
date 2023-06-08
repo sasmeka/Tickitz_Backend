@@ -22,7 +22,16 @@ model.getData = (id) => {
             })
     })
 }
-
+model.newIdData = () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT currval(pg_get_serial_sequence(\'public.users\', \'id_user\')) as new_id_user')
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
 model.getDatabyEmail = (email) => {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM public.users WHERE email=$1 limit 1;', [email])
@@ -34,20 +43,20 @@ model.getDatabyEmail = (email) => {
     })
 }
 
-model.addData = ({ first_name, last_name, phone, email, pass }) => {
+model.addData = ({ first_name, last_name, phone, email, pass_hash }) => {
     return new Promise((resolve, reject) => {
-        db.query('insert into public.users (first_name, last_name, phone, email, pass, status_verification) values ($1,$2,$3,$4,$5,0);', [first_name, last_name, phone, email, pass])
+        db.query('insert into public.users (first_name, last_name, phone, email, pass, status_verification) values ($1,$2,$3,$4,$5,0);', [first_name, last_name, phone, email, pass_hash])
             .then(() => {
                 resolve('account has been registered, please verify.')
-            }).catch(() => {
-                reject('account verification failed.')
+            }).catch((e) => {
+                reject('user data failed to add.')
             })
     })
 }
 
-model.updateData = ({ id_user, first_name, last_name, phone, email, pass, status_verification }) => {
+model.updateData = ({ id_user, first_name, last_name, phone, email, pass_hash, status_verification }) => {
     return new Promise((resolve, reject) => {
-        db.query('update public.users SET first_name=$2, last_name=$3, phone=$4, email=$5, pass=$6, status_verification=$7 where id_user = $1;', [id_user, first_name, last_name, phone, email, pass, status_verification])
+        db.query('update public.users SET first_name=$2, last_name=$3, phone=$4, email=$5, pass=$6, status_verification=$7 where id_user = $1;', [id_user, first_name, last_name, phone, email, pass_hash, status_verification])
             .then(() => {
                 resolve('user data successfully updated.')
             }).catch(() => {
@@ -56,9 +65,9 @@ model.updateData = ({ id_user, first_name, last_name, phone, email, pass, status
     })
 }
 
-model.verification = ({ id_user, email }) => {
+model.verification = ({ result_id, result_email }) => {
     return new Promise((resolve, reject) => {
-        db.query('update public.users SET status_verification=1 where id_user = $1 and email=$2;', [id_user, email])
+        db.query('update public.users SET status_verification=1 where id_user = $1 and email=$2;', [result_id, result_email])
             .then(() => {
                 resolve('verified account successfully.')
             }).catch(() => {
