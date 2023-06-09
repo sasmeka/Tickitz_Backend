@@ -5,7 +5,6 @@ const hashing = require('../library/hashing')
 
 control.getAllData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         let { page, limit } = req.query
         page = page ? parseInt(page) : 1
         limit = limit ? parseInt(limit) : 100
@@ -27,7 +26,6 @@ control.getAllData = async (req, res) => {
 
 control.getData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_user = req.params.number
         const result = await model.getData(id_user)
         if (result.rowCount == 0) throw 'data not found.'
@@ -40,7 +38,6 @@ control.getData = async (req, res) => {
 
 control.addData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const { first_name, last_name, phone, email, pass } = req.body
         const pass_hash = await hashing(pass)
         const result_user = await model.getDatabyEmail(email)
@@ -55,7 +52,6 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_user = req.params.id
         const { first_name, last_name, phone, email, pass, status_verification } = req.body
         const pass_hash = await hashing(pass)
@@ -71,7 +67,6 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_user = req.params.id
         const result = await model.deleteAllData({ id_user })
         return resp(res, 200, result)

@@ -5,7 +5,7 @@ const app = express()
 require('dotenv').config()
 // import cors
 const cors = require('cors')
-app.use(cors())
+app.use(cors());
 
 // import database config
 const db = require('./src/configs/database')

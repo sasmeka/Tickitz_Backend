@@ -50,10 +50,8 @@ control.addData = async (req, res) => {
 
 control.updateData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_booking = req.params.id
-        const { id_time_schedule, seats, selected_date } = req.body
-        const id_user = req.data_jwt.id_user
+        const { id_time_schedule, id_user, seats, selected_date } = req.body
         const result_data = await model.getData(id_booking)
         if (result_data.rowCount == 0) throw 'data not found.'
         const result = await model.updateData({ id_booking, id_time_schedule, id_user, seats, selected_date })
@@ -66,7 +64,6 @@ control.updateData = async (req, res) => {
 
 control.deleteData = async (req, res) => {
     try {
-        if (req.data_jwt.role != 'admin') return resp(res, 401, "You are not an admin")
         const id_booking = req.params.id
         const result_data = await model.getData(id_booking)
         if (result_data.rowCount == 0) throw 'data not found.'
