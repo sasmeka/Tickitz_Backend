@@ -5,13 +5,12 @@ const authCheck = require('../middleware/authCheck')
 
 // import controllers
 const control = require('../controllers/genre')
-const resp = require('../library/responses')
-const admin = (req, res, next) => { return req.data_jwt.role != 'admin' ? resp(res, 401, 'your are not an admin.') : next() }
-route.get('/', authCheck, admin, control.getAllData)
-route.get('/:number', authCheck, admin, control.getData)
-route.post('/', authCheck, admin, control.addData)
-route.put('/:id', authCheck, admin, control.updateData)
-route.delete('/:id', authCheck, admin, control.deleteData)
+
+route.get('/', authCheck('admin'), control.getAllData)
+route.get('/:number', authCheck('admin'), control.getData)
+route.post('/', authCheck('admin'), control.addData)
+route.put('/:id', authCheck('admin'), control.updateData)
+route.delete('/:id', authCheck('admin'), control.deleteData)
 
 //export
 module.exports = route
