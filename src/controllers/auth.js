@@ -5,7 +5,8 @@ const nodemailer = require('nodemailer');
 const model = require('../models/user_model')
 const resp = require('../library/responses')
 const jwt = require('../library/jwt')
-const hashing = require('../library/hashing')
+const hashing = require('../library/hashing');
+const cookieParser = require('cookie-parser');
 
 control.home = async (req, res) => {
     try {
@@ -31,10 +32,48 @@ control.login = async (req, res) => {
                 "id_user": result_user.rows[0].id_user,
                 "role": result_user.rows[0].role
             })
-
-            return resp(res, 200, { "message": 'login success.', "Token": token })
+            let optionCookie = {
+                httpOnly: true,
+                sameSite: 'None',
+                maxAge: 24 * 60 * 60 * 1000
+            }
+            optionCookie = process.env.BASE_URL.split('://')[0] == 'https' ? { ...optionCookie, secure: true } : optionCookie
+            res.cookie('jwt', token.refresh_token, optionCookie)
+            return resp(res, 200, { "message": 'login success.', "Token": token.token })
         } else {
             return resp(res, 401, 'wrong password')
+        }
+    } catch (e) {
+        console.log(e)
+        return resp(res, 500, e)
+    }
+}
+
+control.refresh = async (req, res) => {
+    try {
+        if (req.cookies?.jwt) {
+            const refreshToken = req.cookies.jwt;
+            jwebt.verify(refreshToken, process.env.JWT_PRIVATE_KEY_REFRESH,
+                (err, decode) => {
+                    if (err) {
+                        return resp(res, 401, err)
+                    }
+                    else {
+                        const accessToken = jwebt.sign({
+                            data: {
+                                "email": decode.data.email,
+                                "id_user": decode.data.id_user,
+                                "role": decode.data.role
+                            }
+
+                        }, process.env.JWT_PRIVATE_KEY, {
+                            expiresIn: '10m'
+                        });
+                        return resp(res, 200, { "message": 'refresh token success.', "Token": accessToken })
+                    }
+                })
+        } else {
+            return resp(res, 401, 'refresh token not valid')
         }
     } catch (e) {
         console.log(e)
