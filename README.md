@@ -60,6 +60,7 @@ This project aims to build a Rest-API built using Node.js and other supporting m
 This project is based on the following packages:
 
 * [![javascript][javascript.js]][javascript-url]
+* [![pg][pg.js]][pg-url]
 * [![node][node.js]][node-url]
 * [![express][express.js]][express-url]
 * [![bcrypt][bcrypt.js]][bcrypt-url]
@@ -146,6 +147,8 @@ Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](htt
 [product-screenshot]: images/screenshot.png
 [javascript.js]: https://img.shields.io/badge/javascript-000000?style=for-the-badge&logo=javascript&logoColor=white
 [javascript-url]: https://nextjs.org/
+[pg.js]: https://img.shields.io/badge/postgresql-20232A?style=for-the-badge&logo=postgresql&logoColor=#4169E1
+[pg-url]: https://reactjs.org/
 [node.js]: https://img.shields.io/badge/node.js-35495E?style=for-the-badge&logo=nodedotjs&logoColor=339933
 [node-url]: https://vuejs.org/
 [express.js]: https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white
