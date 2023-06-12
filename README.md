@@ -156,7 +156,7 @@ Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](htt
 [cors-url]: https://angular.io/
 [dotenv.js]: https://img.shields.io/badge/dotenv-000000?style=for-the-badge&logo=dotenv&logoColor=white
 [dotenv-url]: https://nextjs.org/
-[jwt.js]: https://img.shields.io/badge/jsonwebtokens-000000?style=for-the-badge&logo=jsonwebtoken&logoColor=white
+[jwt.js]: https://img.shields.io/badge/jsonwebtokens-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white
 [jwt-url]: https://nextjs.org/
 
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
