@@ -57,7 +57,7 @@ This project aims to build a Rest-API built using Node.js and other supporting m
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This project is based on the following packages:
 
 * [![javascript][javascript.js]][javascript-url]
 * [![node][node.js]][node-url]
@@ -65,6 +65,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * [![bcrypt][bcrypt.js]][bcrypt-url]
 * [![cors][cors.js]][cors-url]
 * [![dotenv][dotenv.js]][dotenv-url]
+* [![jwt][jwt.js]][jwt-url]
 
 * [![Svelte][Svelte.dev]][Svelte-url]
 * [![Laravel][Laravel.com]][Laravel-url]
@@ -78,8 +79,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This project worker can follow the steps below:
 
 ### Prerequisites
 
@@ -156,7 +156,8 @@ Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](htt
 [cors-url]: https://angular.io/
 [dotenv.js]: https://img.shields.io/badge/dotenv-000000?style=for-the-badge&logo=dotenv&logoColor=white
 [dotenv-url]: https://nextjs.org/
-
+[jwt.js]: https://img.shields.io/badge/jsonwebtokens-000000?style=for-the-badge&logo=jsonwebtoken&logoColor=white
+[jwt-url]: https://nextjs.org/
 
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
 [Svelte-url]: https://svelte.dev/
