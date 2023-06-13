@@ -11,19 +11,13 @@
     <img src="https://camo.githubusercontent.com/72d4e416bd802a1abc16d86e9d7d7a62318fca378d103f97fda207ef7d61463d/68747470733a2f2f7974332e67677068742e636f6d2f7974632f414b65644f4c543759443978365069522d4366624262464333777a3257617469495a4672495f4930762d366b3d733930302d632d6b2d63307830306666666666662d6e6f2d726a" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Tickitz Backend</h3>
 
   <p align="center">
     An awesome README template to jumpstart your projects!
     <br />
     <a href="https://github.com/sasmeka/Tickitz_Backend/tree/intermediate"><strong>Explore the docs »</strong></a>
     <br />
-    <br />
-    <a href="https://github.com/sasmeka/Tickitz_Backend/tree/intermediate">View Demo</a>
-    ·
-    <a href="https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/issues">Request Feature</a>
   </p>
 </div>
 
@@ -56,18 +50,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+This project aims to build a Rest-API built using Node.js and other supporting modules with a focus on JavaScript.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -98,7 +81,6 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * npm
   ```sh
   npm install npm@latest -g
@@ -106,20 +88,21 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/sasmeka/Tickitz_Backend.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
+   
+   #or
+   
+   yarn install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Run
+   ```sh
+   npm start
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -138,9 +121,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Verdi Sasmeka - [@vrd_meka](https://twitter.com/vrd_meka) - verdysas@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](https://github.com/sasmeka/Tickitz_Backend/tree/intermediate)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
