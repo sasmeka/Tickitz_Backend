@@ -63,6 +63,8 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * [![node][node.js]][node-url]
 * [![express][express.js]][express-url]
 * [![bcrypt][bcrypt.js]][bcrypt-url]
+* [![cors][cors.js]][cors-url]
+* [![dotenv][dotenv.js]][dotenv-url]
 
 * [![Svelte][Svelte.dev]][Svelte-url]
 * [![Laravel][Laravel.com]][Laravel-url]
@@ -150,6 +152,11 @@ Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](htt
 [express-url]: https://nextjs.org/
 [bcrypt.js]: https://img.shields.io/badge/bcrypt-000000?style=for-the-badge
 [bcrypt-url]: https://angular.io/
+[cors.js]: https://img.shields.io/badge/cors-000000?style=for-the-badge
+[cors-url]: https://angular.io/
+[dotenv.js]: https://img.shields.io/badge/dotenv-000000?style=for-the-badge&logo=dotenv&logoColor=white
+[dotenv-url]: https://nextjs.org/
+
 
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
 [Svelte-url]: https://svelte.dev/
