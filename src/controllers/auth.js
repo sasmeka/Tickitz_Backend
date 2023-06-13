@@ -1,12 +1,11 @@
 const control = {}
 const bcrypt = require('bcrypt');
 const jwebt = require('jsonwebtoken')
-const nodemailer = require('nodemailer');
 const model = require('../models/user_model')
 const resp = require('../library/responses')
 const jwt = require('../library/jwt')
+const sendMail = require('../library/sendMail')
 const hashing = require('../library/hashing');
-const cookieParser = require('cookie-parser');
 
 control.home = async (req, res) => {
     try {
@@ -20,11 +19,13 @@ control.home = async (req, res) => {
 control.login = async (req, res) => {
     try {
         const { email, pass } = req.body
+
         const result_user = await model.getDatabyEmail(email)
         if (result_user.rowCount == 0) return resp(res, 401, 'e-mail not registered.')
         const result_pass = result_user.rows[0].pass
         const result_status_verify = result_user.rows[0].status_verification
         if (result_status_verify != 1) return resp(res, 401, 'account not verified.')
+
         const status = await bcrypt.compare(pass, result_pass)
         if (status == true) {
             const token = jwt({
@@ -65,9 +66,8 @@ control.refresh = async (req, res) => {
                                 "id_user": decode.data.id_user,
                                 "role": decode.data.role
                             }
-
                         }, process.env.JWT_PRIVATE_KEY, {
-                            expiresIn: '10m'
+                            expiresIn: JWT_EXPIRE_TIME_REFRESH
                         });
                         return resp(res, 200, { "message": 'refresh token success.', "Token": accessToken })
                     }
@@ -85,32 +85,18 @@ control.register = async (req, res) => {
     try {
         const { first_name, last_name, phone, email, pass } = req.body
         const pass_hash = await hashing(pass)
+
         const result_user = await model.getDatabyEmail(email)
         if (result_user.rowCount > 0) return resp(res, 401, 'e-mail has been registered.')
+
         const result = await model.addData({ first_name, last_name, phone, email, pass_hash })
-        const code_rand = jwt(email)
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.guser,
-                pass: process.env.gpass
-            }
-        });
 
-        const mailOptions = {
-            from: process.env.guser,
-            to: 'sasmekaa@gmail.com',
-            subject: 'Tickitz Verification',
-            text: process.env.base_url + `/verification?token=${code_rand}`
-        };
+        //send verification mail
+        const token_verification = jwt(email).token
+        const subject_mail = 'Tickitz Verification'
+        const text_mail = process.env.base_url + `/verification?token=${token_verification}`
+        sendMail(email, subject_mail, text_mail)
 
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
         return resp(res, 200, result)
     } catch (e) {
         console.log(e)

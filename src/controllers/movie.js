@@ -57,7 +57,8 @@ control.updateData = async (req, res) => {
         if (req.errorFileFIlter !== undefined) return resp(res, 401, req.errorFileFIlter)
         if (req.file === undefined) return resp(res, 401, 'movie posters must be uploaded,')
         const id_movie = req.params.id
-        const { id_director, title, release_date, duration_hour, duration_minute, synopsis, image, movie_id_cast, movie_id_genre } = req.body
+        const { id_director, title, release_date, duration_hour, duration_minute, synopsis, movie_id_cast, movie_id_genre } = req.body
+        const image = req.file.path
         const result = await model.updateAllData({ id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image, movie_id_cast, movie_id_genre })
         return resp(res, 200, result)
     } catch (e) {

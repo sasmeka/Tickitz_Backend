@@ -8,7 +8,7 @@ const control = require('../controllers/booking')
 
 route.get('/', authCheck('admin', 'user'), control.getAllData)
 route.get('/:number', authCheck('admin', 'user'), control.getData)
-route.post('/', authCheck('admin'), control.addData)
+route.post('/', authCheck('admin', 'user'), control.addData)
 route.put('/:id', authCheck('admin'), control.updateData)
 route.delete('/:id', authCheck('admin'), control.deleteData)
 
