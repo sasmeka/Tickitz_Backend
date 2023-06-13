@@ -136,19 +136,12 @@ Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](htt
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/sasmeka/Tickitz_Backend/tree/intermediate/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/sasmeka/Tickitz_Backend.svg?style=for-the-badge
+[contributors-url]: https://github.com/sasmeka/Tickitz_Backend/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/sasmeka/Tickitz_Backend.svg?style=for-the-badge
+[forks-url]: https://github.com/sasmeka/Tickitz_Backend/network/members
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+[linkedin-url]: https://www.linkedin.com/in/verdi-sasmeka-62b91b132/
 [javascript.js]: https://img.shields.io/badge/javascript-000000?style=for-the-badge&logo=javascript&logoColor=white
 [javascript-url]: https://www.javascript.com/
 [pg.js]: https://img.shields.io/badge/postgresql-20232A?style=for-the-badge&logo=postgresql&logoColor=#4169E1
