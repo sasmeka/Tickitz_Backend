@@ -100,7 +100,9 @@ This project worker can follow the steps below:
    
    yarn install
    ```
-3. Run
+3. create a postgresql database and create a table and enter the data according to the files in the migration/sql folder
+4. please configure the email account and database in .env
+5. Run
    ```sh
    npm start
    ```
@@ -113,11 +115,13 @@ This project worker can follow the steps below:
 ## Usage
 
 1. Install [postman](https://www.postman.com/)
-2. visit the following link to export tickitz postman workspace 
+2. Visit the following link to export tickitz postman workspace 
    ```sh
    https://www.postman.com/avionics-meteorologist-14374576/workspace/tickitz/collection/22380820-2a8492cd-b607-4943-b31d-9d8c50cc4543?action=share&creator=22380820
    ```
-3. import the workspace that you already have in stage 2 into the postman application
+3. Import the workspace that you already have in stage 2 into the postman application
+4. Go to tickitz workspace -> auth -> login. The default email and pass please use admin@mail.com and 123456. The token obtained can be used to access data
+5. Please try to do get data with the token. To insert a token, you can do it on the authorization tab and select Bearer Token
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
