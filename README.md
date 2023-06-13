@@ -112,9 +112,12 @@ This project worker can follow the steps below:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Install [postman](https://www.postman.com/)
+2. visit the following link to export tickitz postman workspace 
+   ```sh
+   https://www.postman.com/avionics-meteorologist-14374576/workspace/tickitz/collection/22380820-2a8492cd-b607-4943-b31d-9d8c50cc4543?action=share&creator=22380820
+   ```
+3. import the workspace that you already have in stage 2 into the postman application
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
