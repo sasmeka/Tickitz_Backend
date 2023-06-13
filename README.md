@@ -61,7 +61,9 @@ This section should list any major frameworks/libraries used to bootstrap your p
 
 * [![javascript][javascript.js]][javascript-url]
 * [![node][node.js]][node-url]
-* [![Angular][Angular.io]][Angular-url]
+* [![express][express.js]][express-url]
+* [![bcrypt][bcrypt.js]][bcrypt-url]
+
 * [![Svelte][Svelte.dev]][Svelte-url]
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
@@ -142,10 +144,13 @@ Project Link: [https://github.com/sasmeka/Tickitz_Backend/tree/intermediate](htt
 [product-screenshot]: images/screenshot.png
 [javascript.js]: https://img.shields.io/badge/javascript-000000?style=for-the-badge&logo=javascript&logoColor=white
 [javascript-url]: https://nextjs.org/
-[node.js]: https://img.shields.io/badge/node.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=339933
+[node.js]: https://img.shields.io/badge/node.js-35495E?style=for-the-badge&logo=nodedotjs&logoColor=339933
 [node-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
+[express.js]: https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white
+[express-url]: https://nextjs.org/
+[bcrypt.js]: https://img.shields.io/badge/bcrypt-000000?style=for-the-badge
+[bcrypt-url]: https://angular.io/
+
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
 [Svelte-url]: https://svelte.dev/
 [Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
