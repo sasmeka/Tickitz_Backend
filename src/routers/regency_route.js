@@ -6,7 +6,7 @@ const authCheck = require('../middleware/authCheck')
 // import controllers
 const control = require('../controllers/regency')
 
-route.get('/', authCheck('admin'), control.getAllData)
+route.get('/', control.getAllData)
 route.get('/:number', authCheck('admin'), control.getData)
 route.post('/', authCheck('admin'), control.addData)
 route.put('/:id', authCheck('admin'), control.updateData)

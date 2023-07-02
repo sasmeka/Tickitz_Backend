@@ -51,7 +51,7 @@ function respon(res, status, result = '', meta = '') {
         }
     }
 
-    res.status(status).json(results)
+    return res.status(status).json(results)
 }
 
 module.exports = respon

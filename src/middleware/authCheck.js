@@ -13,7 +13,7 @@ const middleware = (...role) => {
         const token = authorization.replace('Bearer ', '')
         jwt.verify(token, process.env.JWT_PRIVATE_KEY, (err, decode) => {
             if (err) {
-                return resp(res, 401, err)
+                return resp(res, 401, err.message)
             }
             if (role.includes(decode.data.role) == false) return resp(res, 401, "you don't have access.")
             req.data_jwt = decode.data

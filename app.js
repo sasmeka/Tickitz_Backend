@@ -1,6 +1,7 @@
 // import express framework
 const express = require('express')
 const app = express()
+const path = require('path');
 
 // import config dotenv
 require('dotenv').config()
@@ -17,6 +18,9 @@ const route = require('./src/routers/routes')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(route)
+const dir = path.join(__dirname, '/');
+console.log(dir)
+app.use(express.static(dir));
 
 db.connect().then(() => {
     app.listen(process.env.PORT, () => {

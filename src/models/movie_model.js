@@ -3,9 +3,12 @@ const escape = require('pg-format')
 const model = {}
 
 // GET ALL DATA
-model.getAllData = ({ limit, offset, search_title, search_release, order_by }) => {
-    search_title = search_title == "" ? "" : escape("WHERE tm.title %s", "like '%" + search_title + "%'")
+model.getAllData = ({ limit, offset, search_title, search_release, order_by, date_release, month_release, year_release }) => {
+    search_title = search_title == "" ? "" : escape("AND LOWER(tm.title) %s", "like LOWER('%" + search_title + "%')")
     search_release = search_release == "" ? "" : escape("AND tm.release_date =%L", search_release)
+    date_release = date_release == "" ? "" : escape("AND EXTRACT(DAY FROM tm.release_date) =%L", date_release)
+    month_release = month_release == "" ? "" : escape("AND EXTRACT(MONTH FROM tm.release_date)=%L", month_release)
+    year_release = year_release == "" ? "" : escape("AND EXTRACT(YEAR FROM tm.release_date)=%L", year_release)
     order_by = escape("ORDER BY %s", order_by)
     return new Promise((resolve, reject) => {
         db.query(`select tm.id_movie,tm.title,tm.release_date, tm.duration_hour, tm.duration_minute, tm.synopsis , tm.image, c.movie_director ,a.movie_cast as movie_id_cast,b.movie_genre as movie_id_genre from movie tm 
@@ -15,7 +18,7 @@ model.getAllData = ({ limit, offset, search_title, search_release, order_by }) =
         left join (select tmg.id_movie, json_agg(jsonb_build_object('id_genre',tg.id_genre,'name_genre',tg.name_genre)) as movie_genre from movie_genre tmg
         left join genre tg on tmg.id_genre = tg.id_genre
         group by tmg.id_movie) as b on b.id_movie = tm.id_movie
-       left join (select id_director,json_agg(jsonb_build_object('id_director',id_director,'name_director',name_director)) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director ${search_title} ${search_release} ${order_by} DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+       left join (select id_director,json_agg(jsonb_build_object('id_director',id_director,'name_director',name_director)) as movie_director from director d group by id_director) as c on c.id_director=tm.id_director WHERE true ${search_title} ${date_release} ${month_release} ${year_release} ${search_release} ${order_by} DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -43,11 +46,14 @@ model.getData = (value_params) => {
     })
 }
 
-model.getCountData = ({ search_title, search_release }) => {
-    search_title = search_title == "" ? "" : escape("WHERE tm.title %s", "like '%" + search_title + "%'")
+model.getCountData = ({ search_title, search_release, date_release, month_release, year_release }) => {
+    search_title = search_title == "" ? "" : escape("AND tm.title %s", "like '%" + search_title + "%'")
     search_release = search_release == "" ? "" : escape("AND tm.release_date =%L", search_release)
+    date_release = date_release == "" ? "" : escape("AND EXTRACT(DAY FROM tm.release_date) =%L", date_release)
+    month_release = month_release == "" ? "" : escape("AND EXTRACT(MONTH FROM tm.release_date)=%L", month_release)
+    year_release = year_release == "" ? "" : escape("AND EXTRACT(YEAR FROM tm.release_date)=%L", year_release)
     return new Promise((resolve, reject) => {
-        db.query(`select count(tm.id_movie) as count_data from movie tm  ${search_title} ${search_release};`)
+        db.query(`select count(tm.id_movie) as count_data from movie tm WHERE true  ${search_title} ${search_release} ${date_release} ${month_release} ${year_release};`)
             .then((res) => {
                 resolve(res)
             }).catch((e) => {

@@ -5,7 +5,7 @@ const control = require('../controllers/schedule')
 const authCheck = require('../middleware/authCheck')
 
 // import controllers
-route.get('/', authCheck('admin'), control.getAllData)
+route.get('/', control.getAllData)
 route.get('/:number', authCheck('admin'), control.getData)
 route.post('/', authCheck('admin'), control.addData)
 route.post('/time', authCheck('admin'), control.addDataTime)
