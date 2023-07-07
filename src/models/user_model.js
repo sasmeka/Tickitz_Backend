@@ -49,6 +49,7 @@ model.addData = ({ first_name, last_name, phone, email, pass_hash }) => {
             .then(() => {
                 resolve('account has been registered, please verify via email.')
             }).catch((e) => {
+                console.log(`insert into public.users (first_name, last_name, phone, email, pass, status_verification) values (${first_name},${last_name},${phone},${email},${pass_hash},0);`)
                 reject('user data failed to add.')
             })
     })

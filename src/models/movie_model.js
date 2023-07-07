@@ -132,8 +132,9 @@ model.addAllData = async ({ id_director, title, release_date, duration_hour, dur
 
 // UPDATE DATA
 model.updateData = ({ id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image }) => {
+    image = image == "" ? "" : escape(", image=%L", image)
     return new Promise((resolve, reject) => {
-        db.query('update public.movie SET id_director=$2, title=$3, release_date=$4, duration_hour=$5, duration_minute=$6, synopsis=$7, image=$8 where id_movie = $1;', [id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis, image])
+        db.query(`update public.movie SET id_director=$2, title=$3, release_date=$4, duration_hour=$5, duration_minute=$6, synopsis=$7 ${image} where id_movie = $1;`, [id_movie, id_director, title, release_date, duration_hour, duration_minute, synopsis])
             .then(() => {
                 resolve('movie data successfully updated.')
             }).catch(() => {
