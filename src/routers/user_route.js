@@ -7,7 +7,7 @@ const authCheck = require('../middleware/authCheck')
 const control = require('../controllers/user')
 
 route.get('/', authCheck('admin'), control.getAllData)
-route.get('/:number', authCheck('admin'), control.getData)
+route.get('/byid', authCheck('admin'), control.getData)
 route.post('/', authCheck('admin'), control.addData)
 route.put('/:id', authCheck('admin'), control.updateData)
 route.delete('/:id', authCheck('admin'), control.deleteData)

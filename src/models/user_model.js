@@ -3,7 +3,7 @@ const model = {}
 
 model.getAllData = ({ limit, offset }) => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM public.users ORDER BY id_user DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`SELECT id_user, first_name, last_name, phone, email, status_verification, "role" FROM public.users ORDER BY id_user DESC LIMIT $1 OFFSET $2;`, [limit, offset])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -14,7 +14,7 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.users WHERE id_user=$1;', [id])
+        db.query('SELECT id_user, first_name, last_name, phone, email, status_verification, "role" FROM public.users WHERE id_user=$1;', [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {

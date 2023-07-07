@@ -27,7 +27,7 @@ control.getAllData = async (req, res) => {
 
 control.getData = async (req, res) => {
     try {
-        const id_user = req.params.number
+        const id_user = req.data_jwt.id_user
         const result = await model.getData(id_user)
         if (result.rowCount == 0) throw 'data not found.'
         return resp(res, 200, result.rows)

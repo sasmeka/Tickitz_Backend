@@ -49,7 +49,7 @@ control.login = async (req, res) => {
             }
             optionCookie = process.env.BASE_URL.split('://')[0] == 'https' ? { ...optionCookie, secure: true } : optionCookie
             res.cookie('jwt', token.refresh_token, optionCookie)
-            return resp(res, 200, { "message": 'login success.', "Token": token.token, "Refresh_Token": token.refresh_token, "data": data })
+            return resp(res, 200, { "message": 'login success.', "Token": token.token, "Refresh_Token": token.refresh_token })
         } else {
             return resp(res, 401, 'wrong password')
         }
