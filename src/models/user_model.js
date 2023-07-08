@@ -67,6 +67,17 @@ model.updateData = ({ id_user, first_name, last_name, phone, email, image, statu
     })
 }
 
+model.change_Password = ({ id_user, pass }) => {
+    return new Promise((resolve, reject) => {
+        db.query(`update public.users SET pass=$2 where id_user = $1;`, [id_user, pass])
+            .then(() => {
+                resolve('change password successfully.')
+            }).catch(() => {
+                reject('change password failed.')
+            })
+    })
+}
+
 model.verification = ({ result_id, result_email }) => {
     return new Promise((resolve, reject) => {
         db.query('update public.users SET status_verification=1 where id_user = $1 and email=$2;', [result_id, result_email])

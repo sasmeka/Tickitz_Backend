@@ -85,6 +85,20 @@ control.updateData = async (req, res) => {
         return resp(res, 500, e)
     }
 }
+control.change_Password = async (req, res) => {
+    try {
+        const id_user = req.data_jwt.id_user
+        let { pass } = req.body
+        pass = await hashing(pass)
+        const result_data = await model.getData(id_user)
+        if (result_data.rowCount == 0) throw 'data not found.'
+        const result = await model.change_Password({ id_user, pass })
+        return resp(res, 200, result)
+    } catch (e) {
+        console.log(e)
+        return resp(res, 500, e)
+    }
+}
 
 control.deleteData = async (req, res) => {
     try {
