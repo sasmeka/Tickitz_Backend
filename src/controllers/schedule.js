@@ -4,13 +4,14 @@ const resp = require('../library/responses')
 
 control.getAllData = async (req, res) => {
     try {
-        let { page, limit, id_movie, id_regency } = req.query
+        let { page, limit, id_movie, id_regency, pickdate } = req.query
         page = page ? parseInt(page) : 1
         limit = limit ? parseInt(limit) : 100
         id_movie = id_movie ? id_movie : ""
         id_regency = id_regency ? id_regency : ""
+        pickdate = pickdate ? pickdate : ""
         let offset = page >= 1 ? 0 + ((page - 1) * limit) : 0
-        const result = await model.getAllData({ limit, offset, id_movie, id_regency })
+        const result = await model.getAllData({ limit, offset, id_movie, id_regency, pickdate })
         if (result.rowCount == 0) throw 'data not found.'
         const result_count_data = await model.getCountData({ id_movie, id_regency })
         const meta = {
