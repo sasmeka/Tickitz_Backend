@@ -45,7 +45,7 @@ control.getData = async (req, res) => {
 control.addData = async (req, res) => {
     try {
         if (req.errorFileFIlter !== undefined) return resp(res, 401, req.errorFileFIlter)
-        if (req.file === undefined) return resp(res, 401, 'movie posters must be uploaded,')
+        if (req.file === undefined) return resp(res, 500, 'movie posters must be uploaded,')
         const { id_director, title, release_date, duration_hour, duration_minute, synopsis, movie_id_cast, movie_id_genre } = req.body
         const image = req.file.path
         console.log({ id_director, title, release_date, duration_hour, duration_minute, synopsis, image, movie_id_cast, movie_id_genre })
